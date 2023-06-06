@@ -1,0 +1,372 @@
+{% assign shopify_ID = 'shopify_us_' %}
+{% assign server_url = 'https://gtm.bullymax.com/' %}
+{% assign gtm_id = 'GTM-5SXBBH' %}
+{% assign gads_id = 'AW-1027822635' %}
+{% assign ga4_id = 'G-BQTGN4PS4F' %}
+{% assign bing_id = '20118449' %}
+{% assign pinterest_id = '2618627537941' %}
+{% assign tiktok_id = 'CCI7RPBC77U42MHSGN40' %}
+{% assign facebook_pixel_id = '586398471519070' %}
+
+
+
+
+
+<script>
+  function uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+</script>
+
+
+
+
+<script type="text/javascript">
+  window.addEventListener('load', function(){
+
+    {% if customer %}
+
+    window.dataLayer.push({
+      'event': 'login',
+      'eventModel': {
+        'user_id': '{{ customer.id | remove: "'" }}',
+        'visitor_type': 'logged_in',
+        'tag_source': 'server_side',
+        'event_id': uuid(),
+        'orders_count': '{{ customer.orders_count }}',
+        'total_spent': '{{ customer.total_spent | divided_by: 100 }}',
+        'user_data': {
+        'email_address': '{{ customer.email }}',
+        'phone_number': '{{ customer.phone }}',
+        'address': {
+        'first_name': '{{ customer.first_name }}',
+        'last_name': '{{ customer.last_name }}',
+        'city': '{{ customer_address.city }}',
+        'region': '{{ customer_address.province_code }}',
+        'postal_code': '{{ shipping_address.zip }}',
+        'country': '{{ customer_address.country_code }}',
+        'street': '{{ customer_address.street }}',  
+      },    
+    },                    
+  },
+});
+    {% else %}
+    {% endif %}
+
+
+
+    {% if checkout.discounts_amount %}
+    var discounts = [];
+    {% for discount in checkout.discounts %}
+    discount = {};
+    discount.code = "{{ discount.code }}";
+    discount.amount = {{ discount.amount | times: 0.01 }};
+    discount.savings = {{ discount.savings | times: 0.01 }};
+    discount.title = "{{ discount.title | money }}";
+    discount.type = "{{ discount.title }}";
+    discounts.push(discount);
+    {% endfor %}
+    if(discounts.length) {
+      window.dataLayer.push({
+        discounts: discounts,
+      });
+    }
+    {% if checkout.discounts_amount %}
+    window.dataLayer.push({
+      discountTotalAmount: {{ checkout.discounts_amount }},
+    });
+    {% endif %}
+    {% if checkout.discounts_savings %}
+    window.dataLayer.push({
+      discountTotalSavings: {{ checkout.discounts_savings }},
+    });
+    {% endif %}
+    {% endif %}
+
+    {% if checkout %}
+
+    var step = Shopify.Checkout.step;
+    {% if page_title contains "My information" %}
+window.dataLayer.push({
+        'event': 'begin_checkout',
+            'eventModel': {
+        'currency': ShopifyAnalytics.meta.currency,
+        'value': {{ checkout.total_price | money_without_currency | remove:',' }},
+        'tag_source': 'server_side',
+        'event_id': uuid(),
+        'step': step,
+        items: [
+        {% for line_item in checkout.line_items %}
+        { 
+        name: '{{ line_item.title }}', 
+        affiliation: '{{ shop.name }}', 
+        item_name: '{{line_item.product.title | remove: "'"}}',
+        {% if line_item.sku != '' %}
+        id_sku:  '{{line_item.sku}}',
+        item_id_sku:  '{{line_item.sku}}',
+        {%else%}
+        id_sku:  '{{line_item.variant_id}}',
+        item_id_sku: '{{line_item.variant_id}}',  
+        {% endif %}  
+        shopify_id: '{{line_item.product_id}}_{{line_item.variant_id}}', 
+        sku: '{{line_item.sku}}',
+        item_sku: '{{line_item.sku}}',
+        variant_id: '{{line_item.variant_id}}', 
+        item_id: '{{line_item.product_id}}', 
+        id: '{{line_item.product_id}}', 
+        content_id: '{{line_item.variant_id}}', 
+        item_variant: '{{line_item.variant_id}}', 
+        price: {{line_item.final_price | times: 0.01}}, 
+        brand: '{{line_item.vendor | remove: "'"}}', 
+        item_brand: '{{line_item.vendor | remove: "'"}}', 
+        category: '{{line_item.product.type | remove: "'"}}', 
+        item_category: '{{line_item.product.type | remove: "'"}}', 
+        variant: '{{line_item.variant.title | remove: "'"}}', 
+        quantity: {{ line_item.quantity }},
+        product_name:  '{{line_item.title | remove: "'"}}',
+        product_id: '{{line_item.product_id}}', 
+        product_sku: '{{line_item.sku}}',
+        product_variant_id: '{{line_item.variant_id}}', 
+        product_price: {{line_item.final_price | times: 0.01}}, 
+        product_brand: '{{line_item.vendor | remove: "'"}}', 
+        product_category: '{{line_item.product.type | remove: "'"}}', 
+        product_variant: '{{line_item.variant_id}}', 
+        product_quantity: {{ line_item.quantity }} }, 
+      {% endfor %} ],
+      ecomm_pagetype: 'cart',
+      ecomm_prodid: [{% for line_item in checkout.line_items %}'{{shopify_ID}}{{ line_item.product.id }}', '{{shopify_ID}}{{ line_item.product.id }}_{{ line_item.variant.id }}', '{{ line_item.product.id }}', '{{ line_item.variant.id }}', '{{ line_item.variant.sku }}' {% unless forloop.last %}, {% endunless %}{% endfor %}],
+      id: [{% for line_item in checkout.line_items %}'{{shopify_ID}}{{ line_item.product.id }}', '{{shopify_ID}}{{ line_item.product.id }}_{{ line_item.variant.id }}', '{{ line_item.product.id }}', '{{ line_item.variant.id }}', '{{ line_item.variant.sku }}' {% unless forloop.last %}, {% endunless %}{% endfor %}],
+    },
+      });	
+    {% elsif page_title contains "Shipping" %}
+      window.dataLayer.push({
+        'event': 'add_shipping_info',
+                  'eventModel': {
+        'currency': ShopifyAnalytics.meta.currency,
+        'value': {{ checkout.total_price | money_without_currency | remove:',' }},
+        'tag_source': 'server_side',
+        'event_id': uuid(),
+        'step': step,
+        user_data: {
+        email_address: '{{ checkout.email }}',
+        phone_number: '{{ checkout.shipping_address.phone }}',
+        address: {
+        first_name: '{{ checkout.shipping_address.first_name }}',
+        last_name: '{{ checkout.shipping_address.last_name }}',
+        'city': '{{ checkout.shipping_address.city }}',
+        'region': '{{ checkout.shipping_address.province_code }}',
+        'postal_code': '{{ checkout.shipping_address.zip }}',
+        'country': '{{ checkout.shipping_address.country_code }}',
+        'street': '{{ checkout.shipping_address.street }}',   
+      },    
+    },
+        items: [
+        {% for line_item in checkout.line_items %}
+        { 
+        name: '{{ line_item.title }}', 
+        affiliation: '{{ shop.name }}', 
+        item_name: '{{line_item.product.title | remove: "'"}}',
+        {% if line_item.sku != '' %}
+        id_sku:  '{{line_item.sku}}',
+        item_id_sku:  '{{line_item.sku}}',
+        {%else%}
+        id_sku:  '{{line_item.variant_id}}',
+        item_id_sku: '{{line_item.variant_id}}',  
+        {% endif %}  
+        shopify_id: '{{line_item.product_id}}_{{line_item.variant_id}}', 
+        sku: '{{line_item.sku}}',
+        item_sku: '{{line_item.sku}}',
+        variant_id: '{{line_item.variant_id}}', 
+        item_id: '{{line_item.product_id}}', 
+        id: '{{line_item.product_id}}', 
+        content_id: '{{line_item.variant_id}}', 
+        item_variant: '{{line_item.variant_id}}', 
+        price: {{line_item.final_price | times: 0.01}}, 
+        brand: '{{line_item.vendor | remove: "'"}}', 
+        item_brand: '{{line_item.vendor | remove: "'"}}', 
+        category: '{{line_item.product.type | remove: "'"}}', 
+        item_category: '{{line_item.product.type | remove: "'"}}', 
+        variant: '{{line_item.variant.title | remove: "'"}}', 
+        quantity: {{ line_item.quantity }},
+        product_name:  '{{line_item.title | remove: "'"}}',
+        product_id: '{{line_item.product_id}}', 
+        product_sku: '{{line_item.sku}}',
+        product_variant_id: '{{line_item.variant_id}}', 
+        product_price: {{line_item.final_price | times: 0.01}}, 
+        product_brand: '{{line_item.vendor | remove: "'"}}', 
+        product_category: '{{line_item.product.type | remove: "'"}}', 
+        product_variant: '{{line_item.variant_id}}', 
+        product_quantity: {{ line_item.quantity }} }, 
+      {% endfor %} ],
+      ecomm_pagetype: 'cart',
+      ecomm_prodid: [{% for line_item in checkout.line_items %}'{{shopify_ID}}{{ line_item.product.id }}', '{{shopify_ID}}{{ line_item.product.id }}_{{ line_item.variant.id }}', '{{ line_item.product.id }}', '{{ line_item.variant.id }}', '{{ line_item.variant.sku }}' {% unless forloop.last %}, {% endunless %}{% endfor %}],
+      id: [{% for line_item in checkout.line_items %}'{{shopify_ID}}{{ line_item.product.id }}', '{{shopify_ID}}{{ line_item.product.id }}_{{ line_item.variant.id }}', '{{ line_item.product.id }}', '{{ line_item.variant.id }}', '{{ line_item.variant.sku }}' {% unless forloop.last %}, {% endunless %}{% endfor %}],
+                  },
+      });	
+
+    {% elsif page_title contains "Payment" %}
+      window.dataLayer.push({
+        'event': 'add_payment_info',
+                        'eventModel': {
+        'currency': ShopifyAnalytics.meta.currency,
+        'value': {{ checkout.total_price | money_without_currency | remove:',' }},
+        'tag_source': 'server_side',
+        'event_id': uuid(),
+        'step': step,
+        user_data: {
+        email_address: '{{ checkout.email }}',
+        phone_number: '{{ checkout.shipping_address.phone }}',
+        address: {
+        first_name: '{{ checkout.shipping_address.first_name }}',
+        last_name: '{{ checkout.shipping_address.last_name }}',
+        'city': '{{ checkout.shipping_address.city }}',
+        'region': '{{ checkout.shipping_address.province_code }}',
+        'postal_code': '{{ checkout.shipping_address.zip }}',
+        'country': '{{ checkout.shipping_address.country_code }}',
+        'street': '{{ checkout.shipping_address.street }}',   
+      },    
+    },
+        items: [
+        {% for line_item in checkout.line_items %}
+        { 
+        name: '{{ line_item.title }}', 
+        affiliation: '{{ shop.name }}', 
+        item_name: '{{line_item.product.title | remove: "'"}}',
+        {% if line_item.sku != '' %}
+        id_sku:  '{{line_item.sku}}',
+        item_id_sku:  '{{line_item.sku}}',
+        {%else%}
+        id_sku:  '{{line_item.variant_id}}',
+        item_id_sku: '{{line_item.variant_id}}',  
+        {% endif %}  
+        shopify_id: '{{line_item.product_id}}_{{line_item.variant_id}}', 
+        sku: '{{line_item.sku}}',
+        item_sku: '{{line_item.sku}}',
+        variant_id: '{{line_item.variant_id}}', 
+        item_id: '{{line_item.product_id}}', 
+        id: '{{line_item.product_id}}', 
+        content_id: '{{line_item.variant_id}}', 
+        item_variant: '{{line_item.variant_id}}', 
+        price: {{line_item.final_price | times: 0.01}}, 
+        brand: '{{line_item.vendor | remove: "'"}}', 
+        item_brand: '{{line_item.vendor | remove: "'"}}', 
+        category: '{{line_item.product.type | remove: "'"}}', 
+        item_category: '{{line_item.product.type | remove: "'"}}', 
+        variant: '{{line_item.variant.title | remove: "'"}}', 
+        quantity: {{ line_item.quantity }},
+        product_name:  '{{line_item.title | remove: "'"}}',
+        product_id: '{{line_item.product_id}}', 
+        product_sku: '{{line_item.sku}}',
+        product_variant_id: '{{line_item.variant_id}}', 
+        product_price: {{line_item.final_price | times: 0.01}}, 
+        product_brand: '{{line_item.vendor | remove: "'"}}', 
+        product_category: '{{line_item.product.type | remove: "'"}}', 
+        product_variant: '{{line_item.variant_id}}', 
+        product_quantity: {{ line_item.quantity }} }, 
+      {% endfor %} ],
+      ecomm_pagetype: 'cart',
+      ecomm_prodid: [{% for line_item in checkout.line_items %}'{{shopify_ID}}{{ line_item.product.id }}', '{{shopify_ID}}{{ line_item.product.id }}_{{ line_item.variant.id }}', '{{ line_item.product.id }}', '{{ line_item.variant.id }}', '{{ line_item.variant.sku }}' {% unless forloop.last %}, {% endunless %}{% endfor %}],
+      id: [{% for line_item in checkout.line_items %}'{{shopify_ID}}{{ line_item.product.id }}', '{{shopify_ID}}{{ line_item.product.id }}_{{ line_item.variant.id }}', '{{ line_item.product.id }}', '{{ line_item.variant.id }}', '{{ line_item.variant.sku }}' {% unless forloop.last %}, {% endunless %}{% endfor %}],
+                        },
+      });	
+
+    {% endif %}
+
+{% unless order %}
+
+
+
+{% endunless %}
+    {% endif %}
+    {%  comment %}
+    {% if order %}
+      window.dataLayer.push({
+        'event': 'purchase_checkout',
+  currency: '{{ shop.currency }}',
+  event_id: '{{order.order_number}}',
+  purchase_step: 'pur_chec',
+  shopify_order_id: '{{ order.id }}',
+  order_note: '{{ order.note }}',
+  transaction_id: '{{order.order_number}}',
+  value: {{ checkout.total_price | money_without_currency | remove:',' }},
+  affiliation: '{{ shop.name }}',
+  shipping: {{ checkout.shipping_price | money_without_currency | remove:',' }},
+  coupon: '{{ discount.code }}',
+  tax: {{ checkout.tax_price | money_without_currency | remove:',' }},
+  tag_source: 'server_side',
+  user_id: '{{ order.customer.id | remove: "'" }}',
+  user_transactions_count: '{{ order.customer.orders_count }}',
+  user_total_spent: '{{ order.customer.total_spent | divided_by: 100 }}',
+  user_data: {
+      email_address: '{{ order.customer.email }}',
+      phone_number: '{{ order.customer.default_address.phone }}',
+      address: {
+        first_name: '{{ order.customer.first_name }}',
+        last_name: '{{ order.customer.last_name }}',
+        'city': '{{ order.billing_address.city }}',
+        'region': '{{ order.billing_address.province_code }}',
+        'postal_code': '{{ order.billing_address.zip }}',
+        'country': '{{ order.billing_address.country_code }}',     
+      },    
+    },
+  items: [ {% for line_item in order.line_items %} { 
+    name: '{{ line_item.title }}', 
+    affiliation: '{{ shop.name }}', 
+    item_name: '{{line_item.product.title | remove: "'"}}',
+    {% if line_item.sku != '' %}
+      id_sku:  '{{line_item.sku}}',
+      item_id_sku:  '{{line_item.sku}}',
+    {%else%}
+      id_sku:  '{{line_item.variant_id}}',
+    	item_id_sku: '{{line_item.variant_id}}',  
+    {% endif %}  
+    shopify_id: '{{line_item.product_id}}_{{line_item.variant_id}}', 
+    sku: '{{line_item.sku}}',
+    item_sku: '{{line_item.sku}}',
+    variant_id: '{{line_item.variant_id}}', 
+    item_id: '{{line_item.product_id}}', 
+    id: '{{line_item.product_id}}', 
+    content_id: '{{line_item.variant_id}}', 
+    item_variant: '{{line_item.variant_id}}', 
+    price: {{line_item.final_price | times: 0.01}}, 
+    brand: '{{line_item.vendor | remove: "'"}}', 
+    item_brand: '{{line_item.vendor | remove: "'"}}', 
+    category: '{{line_item.product.type | remove: "'"}}', 
+    item_category: '{{line_item.product.type | remove: "'"}}', 
+    variant: '{{line_item.variant.title | remove: "'"}}', 
+    quantity: {{ line_item.quantity }},
+    product_name:  '{{line_item.title | remove: "'"}}',
+    product_id: '{{line_item.product_id}}', 
+    product_sku: '{{line_item.sku}}',
+    product_variant_id: '{{line_item.variant_id}}', 
+    product_price: {{line_item.final_price | times: 0.01}}, 
+    product_brand: '{{line_item.vendor | remove: "'"}}', 
+    product_category: '{{line_item.product.type | remove: "'"}}', 
+    product_variant: '{{line_item.variant_id}}', 
+    product_quantity: {{ line_item.quantity }},
+  }, {% endfor %} ],
+ecomm_pagetype: 'purchase',
+ecomm_prodid: [{% for line_item in order.line_items %}
+  '{{shopify_ID}}{{ line_item.product.id }}', 
+  '{{shopify_ID}}{{ line_item.product.id }}_{{ line_item.variant.id }}', 
+  '{{ line_item.product.id }}', 
+  '{{ line_item.variant.id }}' 
+  {% unless forloop.last %}, {% endunless %}{% endfor %}],
+id: [{% for line_item in order.line_items %}
+  '{{shopify_ID}}{{ line_item.product.id }}', 
+  '{{shopify_ID}}{{ line_item.product.id }}_{{ line_item.variant.id }}', 
+  '{{ line_item.product.id }}', 
+  '{{ line_item.variant.id }}' 
+  {% unless forloop.last %}, {% endunless %}{% endfor %}],
+});		
+    {% endif %}
+       {%  endcomment %}
+  }, false);
+</script>
+
+
+
+

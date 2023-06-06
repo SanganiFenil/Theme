@@ -1,0 +1,81 @@
+.featured-collection-list .autoship-reviews, .featured-collection-list .filter_products_list{
+      background-color: #f4f4f4;
+  border-radius: 5px;
+}
+.featured-collection-list .autoship-reviews .free-text-search{
+    width: 100%!important;
+}
+.featured-collection-list .autoship-reviews .free-text-search-input{
+     background-color: #fff;
+}
+.featured-collection-list .autoship-reviews .yotpo-regular-box{
+    width: auto!important;
+    margin: 0 10px!important;
+    background: transparent!important;
+    padding: 25px 0 22px!important;
+    border-top: 1px solid #e3e3e3!important;
+      float: none!important;
+}
+.featured-collection-list .autoship-reviews .yotpo-regular-box-filters-padding{
+      padding: 10px 0 22px!important;
+  border-top: none !important;
+}
+.featured-collection-list .autoship-reviews .bottom-line-items-container{
+    border-top: none !important;
+}
+.featured-collection-list .autoship-reviews .yotpo-label-container{
+      border-top: none;
+}
+.featured-collection-list .collection_filter_list input,
+.featured-collection-list .collection_filter_list label{
+  cursor: pointer;
+}
+.featured-collection-list .collection_filter_list input:before{
+cursor: pointer;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #C8C8C8;
+    border-radius: 3px;
+    background-color: #fff;
+    transition: border 0.15s ease-in-out,color 0.15s ease-in-out;
+}
+.featured-collection-list .collection_filter_list input:after{
+    cursor: pointer;
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    font-weight: 700;
+    color: #FC4F02;
+}
+.collection_filter_list input[type="checkbox"]:checked::after{
+    content: "✓";
+}
+
+@media(max-width: 992px){
+.featured-collection-list .mob_filter_list_title{
+      column-gap: 10px;
+}
+.featured-collection-list .mob_filter_list_title .arrow {
+     transform: rotate(90deg); 
+    transition: .5s;
+}
+.featured-collection-list .mob_filter_list_title .arrow.active_arrow {
+         transform: rotate(270deg);
+}
+.featured-collection-list .mob_collection_filter_list_wrap{
+  display: none;
+}
+.featured-collection-list .mobile_filter_info{
+    flex-direction: column;
+    height: 100%;
+}  
+}

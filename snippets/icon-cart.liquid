@@ -1,0 +1,17 @@
+{%- assign icon_name = settings.cart_icon -%}
+{%- case icon_name -%}
+{%- when 'cart' -%}
+<svg class="theme-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8.70718 2.70718L5.41424 6.00012H14.5858L11.2928 2.70718L12.707 1.29297L17.4142 6.00012H20L18 18.0001H2L0 6.00012H2.58582L7.29297 1.29297L8.70718 2.70718ZM2.36092 8.00012L3.69425 16.0001H16.3057L17.6391 8.00012H2.36092Z" fill="#142C73"/>
+</svg>
+{%- when 'bag' -%}
+<svg class="theme-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 7C8.89543 7 8 6.10457 8 5V4H6V5C6 7.20914 7.79086 9 10 9C12.2091 9 14 7.20914 14 5V4H12V5C12 6.10457 11.1046 7 10 7Z" fill="#142C73"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M2 0H18L20 20H0L2 0ZM2.20998 18L3.80998 2H16.19L17.79 18H2.20998Z" fill="#142C73"/>
+</svg>
+{%- when 'basket' -%}
+<svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16.373 12L19.805 0H24L23.257 2H21.328L17.854 14H4.615L3.776 12H16.373ZM0 3L2.937 10H14.835L16.812 3H0ZM10 16.5C10 17.329 9.328 18 8.5 18C7.672 18 7 17.329 7 16.5C7 15.672 7.672 15 8.5 15C9.328 15 10 15.672 10 16.5ZM13.5 15C12.672 15 12 15.671 12 16.5C12 17.329 12.672 18 13.5 18C14.328 18 15 17.329 15 16.5C15 15.672 14.328 15 13.5 15ZM14.17 5H3.008L4.267 8H13.323L14.17 5Z" fill="#FC4F02"/>
+</svg>
+
+{%- endcase -%}

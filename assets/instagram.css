@@ -1,0 +1,26 @@
+.instagram_feed .page-width{
+      max-width: 1150px;
+      padding-bottom: 25px;
+}
+.instagram_feed .reviews_slide .reviews_slide_inner{
+      max-width: 415px;
+}
+.instagram_feed .reviews_slide .reviews_slide_inner img{
+      border-radius: 5px;
+}
+.instagram_feed .insta_feed_content{
+  max-width: 450px;
+  margin: 0 auto;
+}
+.instagram_feed .reviews_slider .slick-arrow{
+      opacity: 0.7;
+}
+.instagram_feed .reviews_slider .slick-arrow:hover{
+      opacity: 1;
+}
+
+@media (max-width: 992px){
+  .instagram_feed .page-width{
+     max-width: 640px;
+  }
+}

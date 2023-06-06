@@ -1,0 +1,15 @@
+.checklist_with_info .checklist_text {
+      column-gap: 22px;
+}
+.checklist_with_info .checklist_text p{
+margin: 0;
+}
+
+@media (max-width:992px){
+  .checklist_with_info .checklist_left_part{
+        order: 2;
+  }
+  .checklist_with_info .checklist_text{
+       column-gap: 15px;
+  }
+}

@@ -1,0 +1,20 @@
+.homepage_gradient_hero .icon-and-text .gradient_text_w_icon_img{
+    max-width: 28px;  
+}
+.homepage_gradient_hero .icon-and-text .gradient_text_w_icon_content{
+line-height: 1.2;
+}
+
+
+
+@media (max-width: 992px) {
+  .homepage_gradient_hero .rating {
+        text-align: left!important;
+  }
+}
+
+.homepage_gradient_hero .rating{
+  width:100%;
+}
+
+

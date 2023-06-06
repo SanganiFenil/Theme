@@ -1,0 +1,36 @@
+.text-columns-with-imges .text-columns-description{
+    max-width: 545px;
+    margin: 0 auto;
+}
+
+@media (min-width: 993px){
+.text-columns-with-imges .text-columns-heading{
+  font-size: 72px;
+}
+ .text-columns-with-imges .button_wrapper{
+       margin-top: 86px;
+ } 
+}
+
+@media (max-width: 576px){
+  .text-columns-with-imges .text-columns-content{
+        text-align: left!important;
+        margin-top: -20px;
+  }
+  .text-columns-with-imges .text-columns-content .text-columns-content_inner{
+     margin-top: 20px;
+  }
+  .text-columns-with-imges .text-columns-icons{
+    display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex; 
+        justify-content: center;
+    align-items: center;
+  }
+  .text-columns-with-imges .text-columns-img__icon {
+    margin-right: 20px;
+    flex: 0 0 auto;
+  }
+}

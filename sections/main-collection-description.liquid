@@ -1,0 +1,91 @@
+{%- if collection.description != blank -%}
+<div class="top-spacing-{{ section.settings.top_spacing }} {% if section.settings.no_header_spacing %}no_header_spacing {% endif %}">
+  <div class="{{ section.settings.width }} {{ section.settings.texts_aligment }} mt--first-child-0">
+	{{ collection.description }}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+  {
+	"name": "t:sections.main-collection-description.name",
+  	"tag": "section",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:sections.main-collection-description.settings.paragraph.content"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.general.settings.header_layout.content"
+      },
+      {
+  "type": "checkbox",
+  "id": "no_header_spacing",
+  "label": "Remove Margins Below Headers",
+  "default": false
+},
+      {
+        "type": "select",
+        "id": "top_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.top_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.top_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.top_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.top_spacing.options__normal.label"
+          }
+        ],
+        "default": "normal",
+		"label": "t:sections.general.settings.top_spacing.label"
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "t:sections.general.settings.width.options__boxed.label"
+          },
+          {
+            "value": "page-wide",
+            "label": "t:sections.general.settings.width.options__wide.label"
+          },
+          {
+            "value": "page-fullwidth",
+            "label": "t:sections.general.settings.width.options__fullwidth.label"
+          }
+        ],
+        "default": "page-width",
+        "label": "t:sections.general.settings.width.label",
+		"info": "t:sections.general.settings.width.info"
+      },
+	  {
+		"type": "select",
+		"id": "texts_aligment",
+		"options": [
+		  {
+			"value": "text-left",
+			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+		  },
+		  {
+			"value": "text-center",
+			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+		  }
+		],
+		"default": "text-left",
+		"label": "t:sections.main-collection-description.settings.texts_alignment.label"
+	  }
+	]
+  }
+{% endschema %}

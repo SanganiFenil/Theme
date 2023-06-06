@@ -1,0 +1,60 @@
+.homepage_strip_bar .homepage_strip_bar_blocks {
+      padding: 0 0 12px;
+      margin-bottom: 20px;
+}
+.homepage_strip_bar .strip_bar_content ul{
+    margin: 0;
+    padding: 0;
+}
+.homepage_strip_bar .strip_bar_content ul li{
+    list-style: none;
+    background-image: url(https://cdn.shopify.com/s/files/1/0020/5393/1055/files/tick-sign.svg?v=1676911435);
+    background-repeat: no-repeat;
+    background-position: left 3px;
+    background-size: 11px 10px;
+    padding-left: 20px;
+    padding-bottom: 8px;
+    line-height: normal;
+}
+.homepage_strip_bar .strip_bar_content ul li:last-child{
+   padding-bottom: 4px;
+}
+.homepage_strip_bar .strip_bar_text .down_arrow{
+  display: inline-block;
+  transform: rotate(90deg);
+      transition: 0.5s;
+}
+.homepage_strip_bar .strip_bar_text .down_arrow.open{
+    transform: rotate(270deg);
+}
+.homepage_strip_bar .strip_bar_content_wrapper{
+  display: none;
+  max-width: 240px;
+  margin: 0 auto;
+}
+.homepage_strip_bar .strip_bar_text {
+      cursor: pointer;
+    width: fit-content;
+      margin: 0 auto;
+  font-size: 16px;
+      text-align: center;
+}
+.homepage_strip_bar .homepage_strip_bar_slider .slick-dots li button:before{
+      font-size: 9px;
+      opacity: 1;
+    color: #333;
+}
+.homepage_strip_bar .homepage_strip_bar_slider .slick-dots li.slick-active button:before{
+  opacity: 1;
+    color: #fc4f02;
+}
+.homepage_strip_bar .homepage_strip_bar_slider .slick-dots li{
+      margin: 0;
+}
+.homepage_strip_bar .homepage_strip_bar_slider .slick-dots{
+  bottom: -15px;
+}
+.homepage_strip_bar .strip_bar_btn .btn{
+  font-size: 16px;
+      width: 100%;
+}

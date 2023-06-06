@@ -1,0 +1,375 @@
+{{ 'homepage-hero.css' | asset_url | stylesheet_tag }}
+
+{%- capture section_styles -%}
+{%- if section.settings.background != 'hide' -%}
+{%- liquid
+	capture color
+	if section.settings.background == 'color'
+    echo section.settings.color_background
+    else
+    echo section.settings.gradient
+    endif
+    endcapture
+-%}
+{%- if color != "rgba(0,0,0,0)" and color != blank -%}
+#gradient-hero-{{ section.id }}{
+  --color-section-background: {{ color }};
+}
+{%- endif -%}
+  {%- if section.settings.remove_bottom_spacing -%}
+#gradient-hero-{{ section.id }}.section-background,
+#gradient-hero-{{ section.id }} .section-background{
+  padding-bottom: 0;
+}
+{%- endif -%}
+{%- endif -%}
+
+{%- if section.settings.color_description != "rgba(0,0,0,0)" -%}
+{%- endif -%}
+
+
+{%- endcapture -%}
+
+{%- if section_styles != blank -%}
+<style>{{ section_styles }}</style>
+{%- endif -%}
+
+<div id="gradient-hero-{{ section.id }}" class="homepage_gradient_hero top-spacing-{{ section.settings.top_spacing }} {% if section.settings.background != 'hide' %} section-background section-background--{{ section.settings.background_spacing }}{% endif %}">
+  <div class="container page-width">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'rating' %}
+            {% assign star_rating = block.settings.rating_stars | plus: 0 %}
+            <div class="rating text-right">
+              <p class="body3 mt-0 mb-3" style="color: {{ block.settings.text_color }}; text-align:{{ block.settings.align_rating }};">{{block.settings.star_rating_text}} 
+                {% if star_rating > 0 %}
+                <span class="ml-3" style="color: {{ block.settings.star_color }};">
+                  {% assign num = block.settings.rating_stars %}
+                  {% assign range = (1..num) %}
+                  {% for i in range %}★{% endfor %}
+                </span>
+                {% endif %}
+              </p>
+            </div>
+        {% when 'header' %}
+          <h1 class="m-0 mb-3 mb-lg-4" style="color: {{ block.settings.hero_header_color }};">{{ block.settings.hero_header }}</h1>
+
+    {% if section.settings.desktop_image != blank %}
+    <div class="grid">
+      <div class="col-st-12 col-6 ">
+      {% endif %}
+        {% when 'subheading' %}
+          <p class="body1 mt-0 font-weight-700" style="color: {{ block.settings.hero_subheader_color }};">{{ block.settings.hero_subheader }}</p>
+        {% when 'cta_buttons' %}
+          <div class="mt-3 mt-lg-4">
+            {% if block.settings.button_1_text %}
+              <a href="{{ block.settings.button_1_link }}" class="cta-button" style="color: {{ block.settings.btn_text_color }};">{{ block.settings.button_1_text }}</a>
+            {% endif %}
+            {% if block.settings.button_2_text %}
+              <a href="{{ block.settings.button_2_link }}" class="cta-button" style="color: {{ block.settings.btn_text_color }};">{{ block.settings.button_2_text }}</a>
+            {% endif %}
+          </div>
+        {% when 'text_with_icon' %}
+          <div class="icon-and-text mt-3 mt-lg-4 {% if section.settings.desktop_image != blank %}mb-3 mb-lg-4{% endif %}">
+            <img class="gradient_text_w_icon_img" src="{{ 'usa-flag.svg' | file_url }}" alt="{{ block.settings.text_with_icon }}">
+            <p class="body3 ml-2 ml-lg-3 gradient_text_w_icon_content" style="color: {{ block.settings.text_color }};">{{ block.settings.icon_text }}</p>
+          </div>
+        
+         {% if section.settings.desktop_image != blank %}
+      </div>
+      <div class="col-st-12 col-6 align-self-end">
+        <div class="desktop_img {% if section.settings.mobile_image != blank %}mobile--hide{% endif %}">
+          {% assign imagesize = section.settings.desktop_image.width | append: 'x' %}
+          <img srcset="{{ section.settings.desktop_image | img_url: imagesize }} 1x, {{ section.settings.desktop_image | img_url: imagesize, scale: 2 }} 2x"
+               src="{{ section.settings.desktop_image | img_url: imagesize }}"
+               loading="lazy"
+               alt="{{ section.settings.desktop_image.alt | escape }}"
+               >
+        </div>
+           {% if section.settings.mobile_image != blank %}
+        <div class="mobile_img desktop--hide">
+          {% assign imagesize = section.settings.mobile_image.width | append: 'x' %}
+          <img srcset="{{ section.settings.mobile_image | img_url: imagesize }} 1x, {{ section.settings.mobile_image | img_url: imagesize, scale: 2 }} 2x"
+               src="{{ section.settings.mobile_image | img_url: imagesize }}"
+               loading="lazy"
+               alt="{{ section.settings.mobile_image.alt | escape }}"
+               >
+        </div>
+          {% endif %}   
+      </div>
+    </div>
+           {% endif %}
+    
+      {% endcase %}
+    {% endfor %}
+  </div>
+</div>
+
+
+{% schema %}
+{
+    "name": "Gradient Hero Section",
+    "settings":[
+      {
+
+	"type" : "image_picker",
+	"id" : "desktop_image",
+	"label" : "Product Desktop Image"
+
+},
+{
+
+	"type" : "image_picker",
+	"id" : "mobile_image",
+	"label" : "Product Mobile Image"
+
+},
+  {
+        "type": "select",
+        "id": "top_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.top_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.top_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.top_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.top_spacing.options__normal.label"
+          }
+        ],
+        "default": "normal",
+		"label": "t:sections.general.settings.top_spacing.label"
+      },
+	  {
+		"type": "select",
+		"id": "background",
+		"options": [
+		  {
+			"value": "hide",
+			"label": "t:sections.general.settings.background.options__hide.label"
+		  },
+		  {
+			"value": "color",
+			"label": "t:sections.general.settings.background.options__color.label"
+		  },
+		  {
+			"value": "gradient",
+			"label": "t:sections.general.settings.background.options__gradient.label"
+		  }
+		],
+		"default": "hide",
+		"label": "t:sections.general.settings.background.label"
+	  },
+      	  {
+		"type": "color",
+		"id": "color_background",
+		"default": "rgba(0,0,0,0)",
+		"label": "t:sections.general.settings.color_background.label"
+	  },
+      {
+		"type": "color_background",
+        "id": "gradient",
+		"label": "t:sections.general.settings.gradient.label"
+      },
+      	  {
+		"type": "select",
+		"id": "background_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.background_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.background_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.background_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.background_spacing.options__normal.label"
+          }
+        ],
+		"default": "normal",
+		"label": "t:sections.general.settings.background_spacing.label"
+	  },
+            {
+        "type": "checkbox",
+        "id": "remove_bottom_spacing",
+        "default": false,
+		"label": "t:sections.general.settings.remove_bottom_spacing.label"
+            }
+      
+    ],
+    "blocks": [
+        {
+            "type": "header",
+            "name": "Header",
+            "settings":[
+              {
+                  "type": "textarea",
+                  "id": "hero_header",
+                  "label": "Hero Header Text",
+                "info":"Enter '<br>' for manual line breaks."
+              }, 
+              {
+                  "type": "color",
+                  "id": "hero_header_color",
+                  "label": "Hero Header Color"
+              }
+            ]
+        },
+        {
+            "type": "subheading",
+            "name": "Subheader",
+            "settings":[
+              {
+                  "type": "textarea",
+                  "id": "hero_subheader",
+                  "label": "Hero Subheader Text",
+                "info":"Optional - Enter '<br>' for manual line breaks."
+              }, 
+              {
+                  "type": "color",
+                  "id": "hero_subheader_color",
+                  "label": "Hero Subheader Color"
+              }
+            ]
+        },
+        {
+            "type": "cta_buttons",
+            "name": "CTA Buttons",
+            "settings":[
+              {
+                  "type": "text",
+                  "id": "button_1_text",
+                  "label": "First Button Text"
+              },
+              {
+                "type": "url",
+                "id": "button_1_link",
+                "label": "Button 1 link"
+              },
+              {
+                  "type": "text",
+                  "id": "button_2_text",
+                  "label": "First Button Text"
+              },
+              {
+                "type": "url",
+                "id": "button_2_link",
+                "label": "Button 2 link"
+              },
+              {
+                  "type": "color",
+                  "id": "btn_text_color",
+                  "label": "Button text color"
+              }
+            ]
+        },
+        {
+            "type": "text_with_icon",
+            "name": "Text With Icon",
+            "settings":[
+              {
+                  "type": "text",
+                  "id": "icon_file",
+                  "label": "Icon SVG File Name",
+                "info": "Upload svg to shopify settings -> files. Type the name of the file here including the filetype ie: flag_logo.svg"
+              },
+              {
+                "type": "image_picker",
+                "id": "icon_image",
+                "label": "Image if want to use other file type instead."
+              },
+              {
+                  "type": "textarea",
+                  "id": "icon_text",
+                  "label": "Text",
+                  "info":"Optional - Enter '<br>' for manual line breaks."
+              },
+              {
+                  "type": "color",
+                  "id": "text_color",
+                  "label": "Text and star Color"
+              }
+            ]
+        },
+              {
+            "type": "rating",
+            "name": "Rating",
+            "settings":[
+            {
+              "type": "text",
+              "id": "star_rating_text",
+              "label": "Star Rating Text",
+              "default": "Top rated by professionals"
+              },
+              {
+              "type": "range",
+              "id": "rating_stars",
+              "label": "Rating Stars",
+              "default": 5,
+              "unit": "★",
+              "min": 0,
+              "max": 5,
+              "step": 1,
+              "info": "Slide to 0 will hide the star icons."
+              },
+              {
+                  "type": "color",
+                  "id": "text_color",
+                  "label": "Text Color"
+              },
+              {
+                  "type": "color",
+                  "id": "star_color",
+                  "label": "Star Color"
+              },
+              {
+                "type": "select",
+                "id": "align_rating",
+                "label": "Align Rating",
+                "options": [
+                  {
+                    "value": "left",
+                    "label": "Left"
+                  },
+                  {
+                    "value": "center",
+                    "label": "Center"
+                  },
+                  {
+                    "value": "right",
+                    "label": "Right"
+                  }
+                ],
+                "default": "right"
+              }
+            ]
+        }
+    ],
+    "presets":[
+      {
+      "name": "Gradient Hero Section"
+      }
+    ]
+}
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

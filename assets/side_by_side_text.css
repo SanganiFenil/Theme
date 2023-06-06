@@ -1,0 +1,31 @@
+.side_by_side_text_main .side_by_side_right_part .btn{
+    background: transparent;
+    display: block;
+    height: auto;
+    padding: 0;
+    width: fit-content;
+    box-shadow: none;
+}
+.side_by_side_text_main .side_by_side_right_part .btn:hover{
+    text-decoration: underline;
+}
+.side_by_side_text_main .side_by_side_right_part .btn_right_arrow_icon{
+      color : var(--color-accent);
+}
+.side_by_side_text_main .bottom_border{
+      border-top: 2px solid;
+}
+
+
+@media screen and (min-width: 992px) {
+  .desktop_header_top .grid {
+      flex-direction: column;
+  }
+  .desktop_header_top .side_by_side_left_part,
+  .desktop_header_top .side_by_side_right_part{
+    max-width:none!important;
+  }
+  .desktop_header_top .side_by_side_heading{
+    margin-bottom:2rem!important;
+  }
+}

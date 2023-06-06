@@ -1,0 +1,393 @@
+{{ 'text-with-reviews.css' | asset_url | stylesheet_tag }}
+{{ 'image-with-reviews.css' | asset_url | stylesheet_tag }}
+
+{%- capture section_styles -%}
+{%- if section.settings.background != 'hide' -%}
+{%- liquid
+	capture color
+	if section.settings.background == 'color'
+    echo section.settings.color_background
+    else
+    echo section.settings.gradient
+    endif
+    endcapture
+-%}
+{%- if color != "rgba(0,0,0,0)" and color != blank -%}
+#text-with-reviews-{{ section.id }}{
+  --color-section-background: {{ color }};
+}
+{%- endif -%}
+{%- if section.settings.remove_bottom_spacing -%}
+#text-with-reviews-{{ section.id }}.section-background,
+#text-with-reviews-{{ section.id }} .section-background{
+  padding-bottom: 0;
+}
+{%- endif -%}
+{%- endif -%}
+
+{%- if section.settings.color_heading != "rgba(0,0,0,0)" -%}
+  #text-with-reviews-{{ section.id }} .reviews_slide .star-rating{
+  color: {{ section.settings.color_heading }};
+  }
+{% endif %}
+  
+{%- if section.settings.color_description != "rgba(0,0,0,0)" -%}
+#text-with-reviews-{{ section.id }} .review_content, #text-with-reviews-{{ section.id }} .review_name, #text-with-reviews-{{ section.id }} .review-info-links .all_reviews_cta, #text-with-reviews-{{ section.id }} .review-info-links .asterisk_text{
+  color:{{section.settings.color_description}};
+}
+  #text-with-reviews-{{ section.id }} .slick-dots li button:before{
+  border-color: {{section.settings.color_description}};
+}
+#text-with-reviews-{{ section.id }} .slick-dots li.slick-active button:before{
+  background: {{section.settings.color_description}};
+}
+#text-with-reviews-{{ section.id }} .slick-arrow svg path{
+  fill: {{section.settings.color_description}};
+}
+{%- endif -%}
+{%- endcapture -%}
+{%- if section_styles != blank -%}
+<style>{{ section_styles }}</style>
+{%- endif -%}
+
+<div id="text-with-reviews-{{ section.id }}" class="text_with_reviews image_with_reviews top-spacing-{{ section.settings.top_spacing }}{% if section.settings.background != 'hide' and section.settings.background_width == "fullwidth" %} section-background section-background--{{ section.settings.background_spacing }}{% endif %}"
+     data-section-name="featured-in">
+  <div class="{{ section.settings.width }}">
+    {% if section.settings.background != 'hide' and section.settings.background_width == "content_width" %}<div class="section-background section-background--{{ section.settings.background_spacing }} border__radius">{%- endif -%}
+
+           {% if section.settings.heading != blank %}
+       {%- liquid
+          if section.settings.color_heading != "rgba(0,0,0,0)"
+          assign color_heading = ' style="color:' | append: section.settings.color_heading | append: ';"'
+          endif
+      -%}
+      <h2 class="{{ section.settings.heading_tag }} section-title heading--mb text-center" {{ color_heading }}>
+        {{ section.settings.heading }}
+      </h2>
+      {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="image_review_slider_wrapper">
+    {% for block in section.blocks %}
+       <div class="reviews_slider">
+    <div class="grid align-items-center">
+      <div class="col-st-12 col-6 reviews_heading sm-text-center mb-4 mb-lg-0">
+        {% if block.settings.image != blank %}
+          <div class="image_wrapper">
+          {%- assign image = block.settings.image -%}
+          <img srcset="{%- if image.width >= 400 -%}{{ image | image_url: width: 400 }} 400w,{%- endif -%}
+                       {%- if image.width >= 540 -%}{{ image | image_url: width: 540 }} 540w,{%- endif -%}
+                       {%- if image.width >= 1240 -%}{{ image | image_url: width: 1240 }} 1240w,{%- endif -%}
+                       {{ image | image_url }} {{ image.width }}w"
+               src="{{ image | image_url: width: 540 }}"
+               sizes="(min-width: 1440px) {% if page_is_wide %}calc((100vw - {{ settings.spacing_grid_horizontal }}px) / 2){% else %}calc(({{ settings.page_width }}px - 20px) / 2){% endif %},(min-width: 993px) calc((100vw - 140px) / 2),(min-width: 577px) calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2),calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2)"
+               width="{{ image.width }}"
+               height="{{ image.height }}"
+               loading="lazy"
+               alt="{{ image.alt | escape }}"
+               {% render "additional-image-attributes" %}
+               >
+          </div>
+          {% endif %}
+      </div>
+      <div class="col-st-12 col-6">
+      <div class="review_slider_wrapper">
+                <div class="reviews_slide text-center">
+                  <div class="reviews_slide_inner">
+                    {% assign star_rating = block.settings.rating_stars | plus: 0 %}
+                    {% if star_rating > 0 %}
+                    <span class="star-rating">
+                    {% assign num = block.settings.rating_stars %}
+                    {% assign range = (1..num) %}
+                    {% for i in range %}★{% endfor %}
+                    </span>
+                    {% endif %}
+                    {% if block.settings.review_content != blank %}
+                    <div class="my-3 my-lg-4 review_content {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">* {{ block.settings.review_content }}</div>
+                    {% endif %}
+                  {% if block.settings.review_name != blank %}
+                    <cite class="review_name {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">— {{ block.settings.review_name }}</cite>
+                    {% endif %}
+                  </div>
+                </div>
+      </div>
+      </div>
+    </div>
+      </div>
+          {% endfor %}
+            </div>
+          {% endif %}
+
+      {% if section.settings.all_reviews_btn_text != blank or section.settings.asterisk_blurb != blank %}
+            <div class="grid pt-7 pt-lg-8 review-info-links">
+     
+    <div class="col-6 text-center">
+       {% if section.settings.all_reviews_btn_text != blank %}
+      <a href="{{ section.settings.all_reviews_btn_link }}" class="body3 all_reviews_cta">{{ section.settings.all_reviews_btn_text }}</a>
+          {% endif %}
+    </div>     
+    <div class="col-6">
+       {% if section.settings.asterisk_blurb != blank %}
+      <p class="asterisk_text text-center mt-0"><small>{{ section.settings.asterisk_blurb }}</small></p>
+         {% endif %}
+    </div>
+     </div>
+        {% endif %}
+    
+    {% if section.settings.background != 'hide' and section.settings.background_width == "content_width" %}</div>{%- endif -%}
+    
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Image with reviews",
+  	"tag": "section",
+    "settings": [
+      {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+         {
+        "type": "color",
+        "id": "color_heading",
+        "default": "rgba(0,0,0,0)",
+        "label": "t:sections.general.settings.heading.label"
+      },
+      	  {
+		"type": "color",
+		"id": "color_description",
+		"default": "rgba(0,0,0,0)",
+		"label": "t:sections.general.settings.description.label"
+	  },
+      {
+      "type": "url",
+      "id": "all_reviews_btn_link",
+      "label": "All Review button link"
+       },
+                {
+      "type": "text",
+      "id": "all_reviews_btn_text",
+      "label": "All Review buton text"
+    },
+          {
+      "type": "text",
+      "id": "asterisk_blurb",
+      "label": "Asterisk text"
+    },
+      {
+        "type": "header",
+        "content": "t:sections.general.settings.header_layout.content"
+      },
+      {
+        "type": "select",
+        "id": "top_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.top_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.top_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.top_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.top_spacing.options__normal.label"
+          }
+        ],
+        "default": "normal",
+		"label": "t:sections.general.settings.top_spacing.label"
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "t:sections.general.settings.width.options__boxed.label"
+          },
+          {
+            "value": "page-wide",
+            "label": "t:sections.general.settings.width.options__wide.label"
+          }
+        ],
+        "default": "page-width",
+        "label": "t:sections.general.settings.width.label",
+		"info": "t:sections.general.settings.width.info"
+      },
+      {
+        "type": "select",
+        "id": "texts_aligment",
+        "options": [
+		  {
+			"value": "text-left",
+			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+		  },
+		  {
+			"value": "text-center",
+			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+		  }
+        ],
+        "default": "text-center",
+        "label": "t:sections.general.settings.texts_alignment.label"
+      },
+	  {
+		"type": "select",
+		"id": "heading_tag",
+		"options": [
+		  {
+			"value": "h1",
+			"label": "t:sections.general.settings.heading_tag.options__h1.label"
+		  },
+		  {
+			"value": "h2",
+			"label": "t:sections.general.settings.heading_tag.options__small.label"
+		  }
+		],
+		"default": "h2",
+		"label": "t:sections.general.settings.heading_tag.label"
+	  },
+	  {
+		"type": "select",
+		"id": "description_size",
+		"options": [
+		  {
+			"value": "normal",
+			"label": "t:sections.general.settings.description_size.options__normal.label"
+		  },
+		  {
+			"value": "body2",
+			"label": "t:sections.general.settings.description_size.options__small.label"
+		  }
+		],
+		"default": "normal",
+		"label": "t:sections.general.settings.description_size.label"
+	  },
+      {
+        "type": "header",
+		"content": "t:sections.general.settings.header_background.content"
+      },
+	  {
+		"type": "select",
+		"id": "background",
+		"options": [
+		  {
+			"value": "hide",
+			"label": "t:sections.general.settings.background.options__hide.label"
+		  },
+		  {
+			"value": "color",
+			"label": "t:sections.general.settings.background.options__color.label"
+		  },
+		  {
+			"value": "gradient",
+			"label": "t:sections.general.settings.background.options__gradient.label"
+		  }
+		],
+		"default": "hide",
+		"label": "t:sections.general.settings.background.label"
+	  },
+	  {
+		"type": "color",
+		"id": "color_background",
+		"default": "rgba(0,0,0,0)",
+		"label": "t:sections.general.settings.color_background.label"
+	  },
+      {
+		"type": "color_background",
+        "id": "gradient",
+		"label": "t:sections.general.settings.gradient.label"
+      },
+	  {
+		"type": "select",
+		"id": "background_width",
+		"options": [
+		  {
+			"value": "fullwidth",
+			"label": "t:sections.general.settings.background_width.options__1.label"
+		  },
+		  {
+			"value": "content_width",
+			"label": "t:sections.general.settings.background_width.options__2.label"
+		  }
+		],
+		"default": "fullwidth",
+		"label": "t:sections.general.settings.background_width.label"
+	  },
+	  {
+		"type": "select",
+		"id": "background_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.background_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.background_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.background_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.background_spacing.options__normal.label"
+          }
+        ],
+		"default": "normal",
+		"label": "t:sections.general.settings.background_spacing.label"
+	  },
+      {
+        "type": "checkbox",
+        "id": "remove_bottom_spacing",
+        "default": false,
+		"label": "t:sections.general.settings.remove_bottom_spacing.label"
+      }
+	],
+      "blocks": [
+      {
+        "type": "review_block",
+        "name": "Review",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+			"label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "review_content",
+            "label": "Content"
+          },
+          {
+            "type": "text",
+            "id": "review_name",
+            "label": "Name"
+          },
+          {
+            "type": "range",
+            "id": "rating_stars",
+            "label": "Rating Stars",
+            "default": 5,
+            "unit": "★",
+            "min": 0,
+            "max": 5,
+            "step": 1
+            }
+        ]
+      }
+    ],
+    "presets": [
+      {
+      	"name": "Image with reviews"
+      }
+    ]
+  }
+{% endschema %}

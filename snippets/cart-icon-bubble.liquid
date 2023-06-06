@@ -1,0 +1,16 @@
+<span class="cart-icon-bubble">
+  {%- render 'icon-cart' -%}
+</span>
+<span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+{%- if cart != empty -%}
+<div class="cart-count-bubble">
+  {%- if cart.item_count < 100 -%}
+  <span class="visually-hidden" aria-hidden="true">{{ cart.item_count }}</span>
+  <span class="header--cart_count">{{ cart.item_count }}</span>
+  <span class="font-weight-400 item_count_text mobile--hide">items</span> 
+  {%- endif -%}
+</div>
+<div class="header_cart_total_price mobile--hide">
+  <span class="header--cart_subtotal">{{ cart.total_price | money }}</span>
+</div>
+{%- endif -%}

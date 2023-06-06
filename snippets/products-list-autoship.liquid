@@ -1,0 +1,215 @@
+<div id="product-lists-autoship" class="
+product-lists 
+    list-unstyled
+    pt-6"
+  >
+    {% for product in products_list limit: 20 %}
+
+      {% if product.featured_image != blank %}
+
+      {% assign has_sample = false %}
+      {% if product.images.size > 1 %}
+        {% for image in product.images %}
+          {% if image.src contains "product-sample" %}
+            {% assign has_sample = true %}
+            {% capture sample_img %}
+            <img class="product-sample-image lazyload img-fluid"
+                              src="{{ image | img_url: 'master' }}"
+                              alt="{{ image.alt | escape }}"
+                              
+                            >
+            {% endcapture %}
+
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+        <div class="grid 
+        product-lists-list-item py-4 py-sm-6 
+        ">
+          <div class="col-sp-12 col-st-4 col-4">
+            <a href="{{ product.url }}" class="theme-link-color display-block text-decoration-none mb-auto">
+
+              <div class="
+              image-wrapper
+                position-relative
+                overflow-hidden
+                mb-3
+                text-center
+                px-0 px-sm-0
+              ">
+                <img
+                  class="lazy2 img-fluid lazyload "
+                  src="{{ product.featured_image | img_url: 'master'  }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  width="{{ section.settings.image_width }}"
+                  {%- comment -%}height="{{ section.settings.image_height }}"{%- endcomment -%}
+                  loading="lazy"
+                >           
+                {% if has_sample %}
+                {{sample_img}}
+                {% endif %}
+            </div>
+            </a>
+          </div>
+          <div class="col-sp-12 col-st-8 col-8">
+              <p class="font-weight-900 mb-2 mt-0 product-title ">
+                {{ product.title | escape }}
+              </p>
+
+        <div class="yotpo bottomLine"
+        data-product-id="{{ product.id }}"
+             ></div>
+            <div class="inner form-wrapper p-3 p-sm-4">
+        {%- assign product_form_id = 'product-form-' | append: section.id -%}
+        {%- assign current_variant = product.selected_or_first_available_variant -%}
+
+                  <product-form class="product-form">
+
+            <div class="product-form__error-message-wrapper" role="alert" hidden>
+              {%- render "icon-attention" -%}
+              <span class="product-form__error-message"></span>
+            </div>
+        
+ {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}" disabled>
+                     <input
+                         type="hidden"
+                         name="quantity"
+                         id="Quantity-{{ section.id }}"
+                         min="1"
+                         value="1"
+                         >
+   
+              {% if product.metafields.subscriptions.shipping_interval_frequency %}
+              <span class="save_text_mine save_text_mine_top save_text_save pb-3 display-block font-weight-700 body3">Save 10% compared to regular one-time order</span>
+              {% else %}
+              <span class="save_text_mine save_text_mine_top save_text_price pb-3 float-left display-block body3">Price</span>
+                <div class=" product-price mb-3 h4 float-right" style="{{ settings.color_price | prepend: 'color: ' }}">
+                  {% if product.compare_at_price_max > product.price %}
+                    <span class="sr-only">{{ 'product.regular_price' | t }}</span>
+                    {% if current_variant.compare_at_price > current_variant.price %}
+                    <s class="text-muted opacity-75 mr-2">
+                      {{ current_variant.compare_at_price | money }}
+                    </s>
+                    {% endif %}
+                  {% endif %}
+                  <span>
+                    {{ current_variant.price | money }}
+                  </span>
+                </div>
+                {%endif%}
+              <select {% unless product.available %}disabled{% endunless %} name="id" data-productid="{{ product.id }}" data-productid="{{product.id}}" id="product-page-variant-select" class="body3 {% unless product.available %}disabled {% endunless %}custom-select mb-3 {% if product.has_only_default_variant %}d-none{% endif %}">
+                {% unless product.available %}<option disabled value="" selected aria-selected="true" selected="selected">{{ 'product.sold_out' | t }}</option>{% endunless %}
+                {% for variant in product.variants %}
+                  <option 
+                    {% unless variant.available %}disabled{% endunless %}
+                    value="{{ variant.id }}"
+                          
+                          data-select-index="{{forloop.index0}}"
+                          data-subval="{{product.variants[forloop.index0].selling_plan_allocations[0].price | money }}"
+                  >
+                    {{ variant.title }} - {{ variant.price | money_with_currency }}
+                  </option>
+                {% endfor %}
+              </select>
+              
+              {% comment %}Discount settings - TODO - percentage is independant of duration, could be different.{% endcomment %}
+{% assign discount_percentage = 20 %}
+{% comment %}
+              {% assign discount_floor = subscription_product.discount_percentage | floor %}
+{% if discount_percentage == discount_floor %}
+{% assign discount_percentage = discount_floor %}
+{% endif %}
+              {% endcomment %}
+              
+              <div class="rc-container-wrapper rc_container_wrapper" data-widget-container-wrapper="" data-v-app="">
+                <div class="rc-container rc_container" data-widget-container="">
+                  <div class="rc-widget rc_widget" data-widget="">
+                    <div class="rc-template" data-template="">
+                      <div class="rc-template__legacy-radio" data-template-legacy-radio="">
+                        <div class="rc-radio rc-option__subsave rc-option rc_widget__option rc_widget__option--subsave rc-legacy-radio rc_widget__option--active rc-option--active" data-option-subsave="">
+                          <div class="rc_widget__option__selector" data-selector-subsave="">
+                            <input checked id="product_{{product.id}}_group_0custom0_subsave" type="radio" name="selling_plan_0custom0" class="rc-radio__input rc_widget__option__input rc_widget__option__input--subsave m-0" data-radio-subsave="" value="subsave">
+                            <label for="product_{{product.id}}_group_0custom0_subsave" class="rc-radio__label rc_widget__option__label" data-label-subsave="">
+                              <span class="rc-option__text body3" data-label-text-subsave="">Subscribe &amp; Save</span><span class="rc-option__discount rc_widget__option__discount body3" data-label-discount="">10%</span>
+                              <span class="rc-option__price rc_widget__price rc_widget__price--subsave" aria-label="recurring price" data-price-subsave="">{{product.variants[0].selling_plan_allocations[0].price | money }}</span>
+                            </label>
+                          </div>
+                          <div class="rc-selling-plans rc_widget__option__plans" data-plans-container="" style="display: block;">
+                            <div class="cxl-prominence-list">
+          <ul class="orange-tick body4 mt-0 pl-3">
+            <li class="pb-2">Save {{ discount_percentage }}% on all auto-ship orders</li>
+            <li class="pb-2">Save time and never run out of this item</li>
+            <li class="pb-2">Cancel anytime in a few easy steps</li>
+          </ul>
+        </div>
+                            <label class="rc-selling-plans__label visually-hidden" for="selling_plan_{{product.id}}" data-plans-label="">Delivery</label>
+                            <select id="selling_plan_{{product.id}}" class="rc_widget__option__plans__dropdown rc-selling-plans__dropdown" name="selling_plan" data-plans-dropdown="">
+                              
+                              {% for selling_plan in product.selling_plan_groups[0].selling_plans %}
+                              <option data-plan-option="{{selling_plan.name}}" value="{{selling_plan.id}}">{{selling_plan.name}}</option>  
+                              {% endfor %}
+                             
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {%- comment -%}<hr class="mt-4 mb-3 {% if product.has_only_default_variant %}d-none{% endif %}">{%- endcomment -%}
+              {% assign autoship = true %}
+              {% if product.available %}{% include 'subscription-product' %}{% endif %}
+              <div class="d-flexx justify-content-centerx">
+                {% if product.metafields.subscriptions.shipping_interval_frequency %}
+                {% endif %}
+
+                                <button
+                        type="submit"
+                        name="add"
+                        class="product-form__submit add-to-cart-btn btn-block btn w-full"
+                        {% if current_variant.available == false %}disabled{% endif %}
+                        >
+                  {%- if block.settings.button_type_product != "only_text" -%}{%- render "icon-cart" -%}{%- endif -%}
+                  <span>
+                    {%- if current_variant.available and block.settings.button_type_product != "only_icon" -%}
+                    {{ 'products.product.add_to_cart' | t }}
+                    {%- else -%}
+                    {{ 'products.product.sold_out' | t }}
+                    {%- endif -%}
+                  </span>
+
+                  <div class="loading-overlay__spinner hidden">
+                    <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                      <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                    </svg>
+                  </div>
+
+                </button>
+              </div>
+{% endform %}
+          </product-form>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% else %}
+      {% for i in (1..section.settings.limit) %}
+        <div class="pb-4 px-2 my-3 text-center">
+          <a href="#" class="theme-link-color text-decoration-none">
+            <div class="overflow-hidden mb-3 img-thumbnail">
+              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+              {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg bg-light' }}
+            </div>
+            <h6>
+              {{ 'onboarding.product_title' | t }}
+            </h6>
+            <p class="mb-3" style="{{ settings.color_price | prepend: 'color: ' }}">{{ 1999 | money }}</p>
+          </a>
+        </div>
+      {% endfor %}
+
+    {% endfor %}
+  </div>

@@ -1,0 +1,357 @@
+{{ 'homepage-brand-featured-in.css' | asset_url | stylesheet_tag }}
+
+{%- capture section_styles -%}
+{%- if section.settings.background != 'hide' -%}
+{%- liquid
+	capture color
+	if section.settings.background == 'color'
+    echo section.settings.color_background
+    else
+    echo section.settings.gradient
+    endif
+    endcapture
+-%}
+{%- if color != "rgba(0,0,0,0)" and color != blank -%}
+#featured_in-{{ section.id }}{
+  --color-section-background: {{ color }};
+}
+{%- endif -%}
+{%- if section.settings.remove_bottom_spacing -%}
+#featured_in-{{ section.id }}.section-background,
+#featured_in-{{ section.id }} .section-background{
+  padding-bottom: 0;
+}
+{%- endif -%}
+{%- endif -%}
+
+{% if section.settings.btn_text_color != 'rgba(0,0,0,0)' %}
+#featured_in-{{ section.id }} .featured_in-content .cta-button{
+    color: {{ section.settings.btn_text_color }};
+}
+{% endif %}  
+{% if section.settings.btn_hover_text_color != 'rgba(0,0,0,0)' %}
+#featured_in-{{ section.id }} .featured_in-content .cta-button:hover{
+    color: {{ section.settings.btn_hover_text_color }};
+}
+{% endif %} 
+
+{%- if section.settings.color_description != "rgba(0,0,0,0)" -%}
+#featured_in-{{ section.id }} .text__description{
+  color:{{section.settings.color_description}};
+}
+{%- endif -%}
+
+
+{%- endcapture -%}
+{%- if section_styles != blank -%}
+<style>{{ section_styles }}</style>
+{%- endif -%}
+
+<div id="featured_in-{{ section.id }}" class="featured_in top-spacing-{{ section.settings.top_spacing }}"
+     data-section-name="featured-in">
+
+  <div class="featured_in-header">
+  <div class="{{ section.settings.width }}">
+    {% if section.settings.background != 'hide' and section.settings.background_width == "content_width" %}<div class="featured_in_header_inner pt-0 pb-0 section-background section-background--{{ section.settings.background_spacing }} border__radius">{%- endif -%}
+    
+      {% if section.settings.heading != blank %}
+       {%- liquid
+          if section.settings.color_heading != "rgba(0,0,0,0)"
+          assign color_heading = ' style="color:' | append: section.settings.color_heading | append: ';"'
+          endif
+      -%}
+      <h2 class="{{ section.settings.heading_tag }} section-title mb-6 mb-md-8 sm-text-center" {{ color_heading }}>
+        {{ section.settings.heading }}
+      </h2>
+      {% endif %}
+    
+    {% if section.settings.background != 'hide' and section.settings.background_width == "content_width" %}</div>{%- endif -%}
+    
+  </div>
+  </div>
+
+  <div class="featured_in-content {% if section.settings.background != 'hide' and section.settings.background_width == "fullwidth" %} section-background section-background--{{ section.settings.background_spacing }}{% endif %}">
+   <div class="{{ section.settings.width }}">
+    {% if section.settings.background != 'hide' and section.settings.background_width == "content_width" %}<div class="section-background section-background--{{ section.settings.background_spacing }} border__radius">{%- endif -%}
+    
+    {% for block in section.blocks %}
+    <div class="{% if forloop.first == true %} first{% endif %}{% unless forloop.last %} pb-7{% endunless %}">
+      <div class="grid align-items-start">
+      <div class="col-st-12 col-3">
+        <div class="grid align-items-center">
+           <div class="col-st-4 col-12">
+     {% if block.settings.feature_image != blank %}
+        <div class="img_wrapper">
+          {% assign imagesize = block.settings.feature_image.width | append: 'x' %}
+          <img srcset="{{ block.settings.feature_image | img_url: imagesize }} 1x, {{ block.settings.feature_image | img_url: imagesize, scale: 2 }} 2x"
+               src="{{ block.settings.feature_image | img_url: imagesize }}"
+               loading="lazy"
+               alt="{{ block.settings.feature_image.alt | escape }}"
+               >
+      </div>
+          {% endif %}
+           </div>
+           <div class="col-st-8 col-12 sm-text-right">
+                <cite class="desktop--hide">
+          {%if block.settings.feature_url %}
+            <a href="{{ block.settings.feature_url }}" class="cta-button"
+                title="{{ block.settings.feature_name }}">{{ block.settings.feature_name }} <span class="">></span></a>
+          {% else %}
+          {{ block.settings.feature_name }}
+          {% endif %}
+          </cite>
+         </div>
+        </div>
+      </div>
+      <div class="col-st-12 col-9">
+        <cite class="mobile--hide">
+          {%if block.settings.feature_url %}
+            <a href="{{ block.settings.feature_url }}" class="cta-button"
+                title="{{ block.settings.feature_name }}">{{ block.settings.feature_name }} <span class="">></span></a>
+          {% else %}
+          {{ block.settings.feature_name }}
+          {% endif %}
+          </cite>
+        <div class="text__description {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">{{ block.settings.feature_content }}</div>
+          
+      </div>
+      </div>
+    </div>
+    {% endfor %}
+    
+    {% if section.settings.background != 'hide' and section.settings.background_width == "content_width" %}</div>{%- endif -%}
+   </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Featured in",
+  	"tag": "section",
+    "settings": [
+      {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured In"
+    },
+         {
+        "type": "color",
+        "id": "color_heading",
+        "default": "rgba(0,0,0,0)",
+        "label": "t:sections.general.settings.heading.label"
+      },
+      	  {
+		"type": "color",
+		"id": "color_description",
+		"default": "rgba(0,0,0,0)",
+		"label": "t:sections.general.settings.description.label"
+	  },
+      {
+		"type": "color",
+		"id": "btn_text_color",
+		"default": "rgba(0,0,0,0)",
+		"label": "CTA text color"
+	  },
+      {
+		"type": "color",
+        "id": "btn_hover_text_color",
+        "default": "rgba(0,0,0,0)",
+		"label": "CTA hover text color"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.general.settings.header_layout.content"
+      },
+      {
+        "type": "select",
+        "id": "top_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.top_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.top_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.top_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.top_spacing.options__normal.label"
+          }
+        ],
+        "default": "normal",
+		"label": "t:sections.general.settings.top_spacing.label"
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "t:sections.general.settings.width.options__boxed.label"
+          },
+          {
+            "value": "page-wide",
+            "label": "t:sections.general.settings.width.options__wide.label"
+          }
+        ],
+        "default": "page-width",
+        "label": "t:sections.general.settings.width.label",
+		"info": "t:sections.general.settings.width.info"
+      },
+	  {
+		"type": "select",
+		"id": "heading_tag",
+		"options": [
+		  {
+			"value": "h1",
+			"label": "t:sections.general.settings.heading_tag.options__h1.label"
+		  },
+		  {
+			"value": "h2",
+			"label": "t:sections.general.settings.heading_tag.options__small.label"
+		  }
+		],
+		"default": "h2",
+		"label": "t:sections.general.settings.heading_tag.label"
+	  },
+	  {
+		"type": "select",
+		"id": "description_size",
+		"options": [
+		  {
+			"value": "normal",
+			"label": "t:sections.general.settings.description_size.options__normal.label"
+		  },
+		  {
+			"value": "body2",
+			"label": "t:sections.general.settings.description_size.options__small.label"
+		  }
+		],
+		"default": "normal",
+		"label": "t:sections.general.settings.description_size.label"
+	  },
+      {
+        "type": "header",
+		"content": "t:sections.general.settings.header_background.content"
+      },
+	  {
+		"type": "select",
+		"id": "background",
+		"options": [
+		  {
+			"value": "hide",
+			"label": "t:sections.general.settings.background.options__hide.label"
+		  },
+		  {
+			"value": "color",
+			"label": "t:sections.general.settings.background.options__color.label"
+		  },
+		  {
+			"value": "gradient",
+			"label": "t:sections.general.settings.background.options__gradient.label"
+		  }
+		],
+		"default": "hide",
+		"label": "t:sections.general.settings.background.label"
+	  },
+	  {
+		"type": "color",
+		"id": "color_background",
+		"default": "rgba(0,0,0,0)",
+		"label": "t:sections.general.settings.color_background.label"
+	  },
+      {
+		"type": "color_background",
+        "id": "gradient",
+		"label": "t:sections.general.settings.gradient.label"
+      },
+	  {
+		"type": "select",
+		"id": "background_width",
+		"options": [
+		  {
+			"value": "fullwidth",
+			"label": "t:sections.general.settings.background_width.options__1.label"
+		  },
+		  {
+			"value": "content_width",
+			"label": "t:sections.general.settings.background_width.options__2.label"
+		  }
+		],
+		"default": "fullwidth",
+		"label": "t:sections.general.settings.background_width.label"
+	  },
+	  {
+		"type": "select",
+		"id": "background_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.background_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.background_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.background_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.background_spacing.options__normal.label"
+          }
+        ],
+		"default": "normal",
+		"label": "t:sections.general.settings.background_spacing.label"
+	  },
+      {
+        "type": "checkbox",
+        "id": "remove_bottom_spacing",
+        "default": false,
+		"label": "t:sections.general.settings.remove_bottom_spacing.label"
+      }
+	],
+  "blocks": [
+      {
+        "type": "feature_block",
+        "name": "Featured In",
+        "limit": 10,
+        "settings": [
+        {
+          "type": "text",
+          "id": "feature_name",
+          "label": "Featured In Name"
+        },
+        {
+          "type": "url",
+          "id": "feature_url",
+          "label": "Featured In URL"
+        },
+          {
+            "type": "richtext",
+            "id": "feature_content",
+            "label": "Featured In Content"
+          },
+          
+          {
+            "type" : "image_picker",
+            "id" : "feature_image",
+            "label" : "Logo"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+      	"name": "Featured in"
+      }
+    ]
+  }
+{% endschema %}

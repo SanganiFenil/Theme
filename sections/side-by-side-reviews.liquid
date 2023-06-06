@@ -1,0 +1,407 @@
+{{ 'side-by-side-reviews.css' | asset_url | stylesheet_tag }}
+
+
+{%- capture section_styles -%}
+{%- if section.settings.remove_bottom_spacing -%}
+#side-by-side-reviews-{{ section.id }}.section-background,
+#side-by-side-reviews-{{ section.id }} .section-background{
+  padding-bottom: 0;
+}
+{%- endif -%}
+
+{%- if section.settings.color_heading != "rgba(0,0,0,0)" -%}
+  #side-by-side-reviews-{{ section.id }} .reviews_slide .star-rating,
+  #side-by-side-reviews-{{ section.id }} .read-more-gradient-wrapper .link-read-more,
+  #side-by-side-reviews-{{ section.id }} .review-info-links .all_reviews_cta{
+  color: {{ section.settings.color_heading }};
+  }
+{% endif %}
+  
+{%- if section.settings.color_description != "rgba(0,0,0,0)" -%}
+#side-by-side-reviews-{{ section.id }} .review_content, 
+#side-by-side-reviews-{{ section.id }} .review_name,  
+#side-by-side-reviews-{{ section.id }} .review-info-links .asterisk_text{
+  color:{{section.settings.color_description}};
+}
+{%- endif -%}
+{%- endcapture -%}
+{%- if section_styles != blank -%}
+<style>{{ section_styles }}</style>
+{%- endif -%}
+
+<div id="side-by-side-reviews-{{ section.id }}" class="side_by_side_reviews top-spacing-{{ section.settings.top_spacing }}{% if section.settings.background_width == "fullwidth" %} section-background section-background--{{ section.settings.background_spacing }}{% endif %}"
+     data-section-name="featured-in">
+  <div class="{{ section.settings.width }}">
+    {% if section.settings.background_width == "content_width" %}<div class="section-background section-background--{{ section.settings.background_spacing }} border__radius">{%- endif -%}
+
+          <div class="grid el_mt_40">
+      <div class="col-st-12 col-6">
+      <div class="side_by_side_reviews_content left_review mr-lg-5 mr-xl-7">
+           {% if section.settings.left_heading != blank %}
+       {%- liquid
+          if section.settings.color_heading != "rgba(0,0,0,0)"
+          assign color_heading = ' style="color:' | append: section.settings.color_heading | append: ';"'
+          endif
+      -%}
+      <h2 class="{{ section.settings.heading_tag }} section-title mb-5 text-center" {{ color_heading }}>
+        {{ section.settings.left_heading }}
+      </h2>
+      {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="side_by_side_reviews_slider">
+          {% for block in section.blocks %}
+            {% if block.type == 'left-review' %}
+          <div class="reviews_slider mx-2">
+          {% if block.settings.image != blank %}
+          <div class="image_wrapper">
+          {%- assign image = block.settings.image -%}
+          <img srcset="{%- if image.width >= 400 -%}{{ image | image_url: width: 400 }} 400w,{%- endif -%}
+                       {%- if image.width >= 540 -%}{{ image | image_url: width: 540 }} 540w,{%- endif -%}
+                       {%- if image.width >= 1240 -%}{{ image | image_url: width: 1240 }} 1240w,{%- endif -%}
+                       {{ image | image_url }} {{ image.width }}w"
+               src="{{ image | image_url: width: 540 }}"
+               sizes="(min-width: 1440px) {% if page_is_wide %}calc((100vw - {{ settings.spacing_grid_horizontal }}px) / 2){% else %}calc(({{ settings.page_width }}px - 20px) / 2){% endif %},(min-width: 993px) calc((100vw - 140px) / 2),(min-width: 577px) calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2),calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2)"
+               loading="lazy"
+               alt="{{ image.alt | escape }}"
+               {% render "additional-image-attributes" %}
+               >
+          </div>
+          {% endif %}
+           {% if block.settings.review_content != blank or block.settings.review_name != blank %}
+              <div class="review_slider_wrapper">
+                <div class="reviews_slide">
+                  <div class="reviews_slide_inner content_hide">
+                    {% if block.settings.review_content != blank %}
+                    <div class="my-3 my-lg-4 review_content {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">* {{ block.settings.review_content }}</div>
+                    {% endif %}
+                  {% if block.settings.review_name != blank %}
+                    <cite class="review_name {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">— {{ block.settings.review_name }}</cite>
+                    {% endif %}
+                  </div>
+                   <div class="read-more-gradient-wrapper content_hide"> 
+                      <a class="link-read-more underline body4 display-block mt-2" href="javascript:void(0);">Read more</a>
+                    </div>
+                </div>
+          </div>
+             {% endif %}
+          </div>
+              {% endif %}
+          {% endfor %}
+        </div>
+          {% endif %}
+      </div>
+            </div>
+      <div class="col-st-12 col-6">
+      <div class="side_by_side_reviews_content right_review ml-lg-5 ml-xl-7">
+           {% if section.settings.right_heading != blank %}
+       {%- liquid
+          if section.settings.color_heading != "rgba(0,0,0,0)"
+          assign color_heading = ' style="color:' | append: section.settings.color_heading | append: ';"'
+          endif
+      -%}
+      <h2 class="{{ section.settings.heading_tag }} section-title mb-5 text-center" {{ color_heading }}>
+        {{ section.settings.right_heading }}
+      </h2>
+      {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="side_by_side_reviews_slider">
+          {% for block in section.blocks %}
+            {% if block.type == 'right-review' %}
+          <div class="reviews_slider mx-2">
+          {% if block.settings.image != blank %}
+          <div class="image_wrapper">
+          {%- assign image = block.settings.image -%}
+          <img srcset="{%- if image.width >= 400 -%}{{ image | image_url: width: 400 }} 400w,{%- endif -%}
+                       {%- if image.width >= 540 -%}{{ image | image_url: width: 540 }} 540w,{%- endif -%}
+                       {%- if image.width >= 1240 -%}{{ image | image_url: width: 1240 }} 1240w,{%- endif -%}
+                       {{ image | image_url }} {{ image.width }}w"
+               src="{{ image | image_url: width: 540 }}"
+               sizes="(min-width: 1440px) {% if page_is_wide %}calc((100vw - {{ settings.spacing_grid_horizontal }}px) / 2){% else %}calc(({{ settings.page_width }}px - 20px) / 2){% endif %},(min-width: 993px) calc((100vw - 140px) / 2),(min-width: 577px) calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2),calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2)"
+               loading="lazy"
+               alt="{{ image.alt | escape }}"
+               {% render "additional-image-attributes" %}
+               >
+          </div>
+          {% endif %}
+          
+          {% if block.settings.review_content != blank or block.settings.review_name != blank %}
+              <div class="review_slider_wrapper">
+                <div class="reviews_slide">
+                  <div class="reviews_slide_inner content_hide">
+                    {% if block.settings.review_content != blank %}
+                    <div class="my-3 my-lg-4 review_content {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">* {{ block.settings.review_content }}</div>
+                    {% endif %}
+                  {% if block.settings.review_name != blank %}
+                    <cite class="review_name {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">— {{ block.settings.review_name }}</cite>
+                    {% endif %}
+                  </div>
+                   <div class="read-more-gradient-wrapper content_hide"> 
+                      <a class="link-read-more underline body4 display-block mt-2" href="javascript:void(0);">Read more</a>
+                    </div>
+                </div>
+          </div>
+             {% endif %}
+          </div>
+              {% endif %}
+          {% endfor %}
+        </div>
+          {% endif %}
+      </div>
+      </div>
+    </div>
+
+              {% if section.settings.all_reviews_btn_text != blank or section.settings.asterisk_blurb != blank %}
+            <div class="grid pt-6 pt-lg-8 review-info-links">
+              <div class="col-6 text-right xs-text-center">
+                {% if section.settings.asterisk_blurb != blank %}
+              <p class="asterisk_text mt-0 mr-sm-5 mr-xl-7"><small>{{ section.settings.asterisk_blurb }}</small></p>
+                   {% endif %}
+              </div>
+            <div class="col-6 xs-text-center">
+                 {% if section.settings.all_reviews_btn_text != blank %}
+              <a href="{{ section.settings.all_reviews_btn_link }}" class="body3 all_reviews_cta underline ml-sm-5 ml-xl-7">{{ section.settings.all_reviews_btn_text }}</a>
+                    {% endif %}
+              </div>
+           </div>
+          {% endif %}
+    
+    {% if section.settings.background_width == "content_width" %}</div>{%- endif -%}
+    
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Side by side reviews",
+  	"tag": "section",
+    "settings": [
+                  {
+      "type": "text",
+      "id": "left_heading",
+      "label": "Left heading"
+    },
+            {
+      "type": "text",
+      "id": "right_heading",
+      "label": "Right heading"
+    }, 
+            {
+      "type": "url",
+      "id": "all_reviews_btn_link",
+      "label": "All Review button link"
+       },
+                {
+      "type": "text",
+      "id": "all_reviews_btn_text",
+      "label": "All Review buton text"
+    },
+          {
+      "type": "text",
+      "id": "asterisk_blurb",
+      "label": "Asterisk text"
+    },
+         {
+        "type": "color",
+        "id": "color_heading",
+        "default": "rgba(0,0,0,0)",
+        "label": "t:sections.general.settings.heading.label"
+      },
+      	  {
+		"type": "color",
+		"id": "color_description",
+		"default": "rgba(0,0,0,0)",
+		"label": "t:sections.general.settings.description.label"
+	  },
+      {
+        "type": "header",
+        "content": "t:sections.general.settings.header_layout.content"
+      },
+      {
+        "type": "select",
+        "id": "top_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.top_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.top_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.top_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.top_spacing.options__normal.label"
+          }
+        ],
+        "default": "normal",
+		"label": "t:sections.general.settings.top_spacing.label"
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "t:sections.general.settings.width.options__boxed.label"
+          },
+          {
+            "value": "page-wide",
+            "label": "t:sections.general.settings.width.options__wide.label"
+          }
+        ],
+        "default": "page-width",
+        "label": "t:sections.general.settings.width.label",
+		"info": "t:sections.general.settings.width.info"
+      },
+	  {
+		"type": "select",
+		"id": "heading_tag",
+		"options": [
+		  {
+			"value": "h1",
+			"label": "H1"
+		  },
+		  {
+			"value": "h2",
+			"label": "H2"
+		  },
+          		  {
+			"value": "h3",
+			"label": "H3"
+		  },
+          		  {
+			"value": "h4",
+			"label": "H4"
+		  }
+		],
+		"default": "h2",
+		"label": "t:sections.general.settings.heading_tag.label"
+	  },
+	  {
+		"type": "select",
+		"id": "description_size",
+		"options": [
+		  {
+			"value": "normal",
+			"label": "t:sections.general.settings.description_size.options__normal.label"
+		  },
+          {
+			"value": "body2",
+			"label": "Medium"
+		  },
+		  {
+			"value": "body3",
+			"label": "t:sections.general.settings.description_size.options__small.label"
+		  }
+		],
+		"default": "normal",
+		"label": "t:sections.general.settings.description_size.label"
+	  },
+      {
+        "type": "header",
+		"content": "t:sections.general.settings.header_background.content"
+      },
+	  {
+		"type": "select",
+		"id": "background_width",
+		"options": [
+		  {
+			"value": "fullwidth",
+			"label": "t:sections.general.settings.background_width.options__1.label"
+		  },
+		  {
+			"value": "content_width",
+			"label": "t:sections.general.settings.background_width.options__2.label"
+		  }
+		],
+		"default": "fullwidth",
+		"label": "t:sections.general.settings.background_width.label"
+	  },
+	  {
+		"type": "select",
+		"id": "background_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.background_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.background_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.background_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.background_spacing.options__normal.label"
+          }
+        ],
+		"default": "normal",
+		"label": "t:sections.general.settings.background_spacing.label"
+	  },
+      {
+        "type": "checkbox",
+        "id": "remove_bottom_spacing",
+        "default": false,
+		"label": "t:sections.general.settings.remove_bottom_spacing.label"
+      }
+	],
+      "blocks": [
+      {
+        "type": "left-review",
+        "name": "Left Review",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+			"label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "review_content",
+            "label": "Content"
+          },
+          {
+            "type": "text",
+            "id": "review_name",
+            "label": "Name"
+          }
+        ]
+      },
+      {
+        "type": "right-review",
+        "name": "Right Review",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+			"label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "review_content",
+            "label": "Content"
+          },
+          {
+            "type": "text",
+            "id": "review_name",
+            "label": "Name"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+      	"name": "Side by side reviews"
+      }
+    ]
+  }
+{% endschema %}

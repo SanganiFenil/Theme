@@ -1,0 +1,15 @@
+.featured_in-header .featured_in_header_inner{
+    background: var(--color-body-background);
+}
+.featured_in .featured_in-content .img_wrapper{
+      max-width: 160px;
+}
+.featured_in .featured_in-content .cta-button{
+  font-size: var(--font-body-size);
+}
+
+@media (max-width: 992px){
+  .featured_in .featured_in-content .img_wrapper{
+      max-width: 100px;
+}
+}

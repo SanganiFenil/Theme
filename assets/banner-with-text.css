@@ -1,0 +1,13 @@
+.banner_with_text .image_wrapper{
+    margin-left: auto;
+}
+.banner_with_text .banner_with_text_header {
+  max-width: 410px;
+}
+
+@media (max-width: 992px){
+  .banner_with_text .image_wrapper{
+        max-width: 250px;
+    margin-left: auto;
+  }
+}

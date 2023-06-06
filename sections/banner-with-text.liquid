@@ -1,0 +1,256 @@
+{{ 'banner-with-text.css' | asset_url | stylesheet_tag }}
+
+{%- capture section_styles -%}
+
+{% if section.settings.back_image != blank %}  
+  #banner-with-text-{{ section.id }}{
+  background-image: url({{ section.settings.back_image | img_url: '1920x' }});
+      background-repeat: no-repeat;
+    background-size: cover;
+}
+
+{% if section.settings.mobile_back_image != blank %}  
+  @media (max-width: 992px){
+    #banner-with-text-{{ section.id }}{
+      background-image: url({{ section.settings.mobile_back_image | img_url: '1920x' }});
+    }
+  }
+  {% endif %}
+{% endif %}
+  
+{%- if section.settings.background != 'hide' -%}
+{%- liquid
+	capture color
+	if section.settings.background == 'color'
+    echo section.settings.color_background
+    else
+    echo section.settings.gradient
+    endif
+    endcapture
+-%}
+{%- if color != "rgba(0,0,0,0)" and color != blank -%}
+#banner-with-text-{{ section.id }}{
+  --color-section-background: {{ color }};
+}
+{%- endif -%}
+  {%- if section.settings.remove_bottom_spacing -%}
+#banner-with-text-{{ section.id }}.section-background,
+#banner-with-text-{{ section.id }} .section-background{
+  padding-bottom: 0;
+}
+{%- endif -%}
+{%- endif -%}
+
+{%- if section.settings.color_description != "rgba(0,0,0,0)" -%}
+{%- endif -%}
+
+
+{%- endcapture -%}
+
+{%- if section_styles != blank -%}
+<style>{{ section_styles }}</style>
+{%- endif -%}
+
+<div id="banner-with-text-{{ section.id }}" class="banner_with_text top-spacing-{{ section.settings.top_spacing }} {% if section.settings.background != 'hide' %} section-background section-background--{{ section.settings.background_spacing }}{% endif %}">
+  <div class="container page-width">
+
+      {% if section.settings.hero_header != blank %}
+      <div class="banner_with_text_header mb-5">
+      <h2 class="{{ section.settings.heading_tag }} m-0" style="color: {{ section.settings.hero_header_color }};">{{ section.settings.hero_header }}</h2>
+      </div>
+      {% endif %}
+
+    {% if section.settings.desktop_image != blank %}
+      <div class="image_wrapper" style="max-width: {{ section.settings.max_width }}px";>
+        <div class="desktop_img {% if section.settings.mobile_image != blank %}mobile--hide{% endif %}">
+          {% assign imagesize = section.settings.desktop_image.width | append: 'x' %}
+          <img srcset="{{ section.settings.desktop_image | img_url: imagesize }} 1x, {{ section.settings.desktop_image | img_url: imagesize, scale: 2 }} 2x"
+               src="{{ section.settings.desktop_image | img_url: imagesize }}"
+               loading="lazy"
+               alt="{{ section.settings.desktop_image.alt | escape }}"
+               >
+        </div>
+           {% if section.settings.mobile_image != blank %}
+        <div class="mobile_img desktop--hide">
+          {% assign imagesize = section.settings.mobile_image.width | append: 'x' %}
+          <img srcset="{{ section.settings.mobile_image | img_url: imagesize }} 1x, {{ section.settings.mobile_image | img_url: imagesize, scale: 2 }} 2x"
+               src="{{ section.settings.mobile_image | img_url: imagesize }}"
+               loading="lazy"
+               alt="{{ section.settings.mobile_image.alt | escape }}"
+               >
+        </div>
+          {% endif %}   
+      </div>
+   {% endif %}
+  </div>
+</div>
+
+
+{% schema %}
+{
+    "name": "Banner with text",
+    "settings":[
+            {
+	"type" : "image_picker",
+	"id" : "back_image",
+	"label" : "Background image"
+
+},
+                  {
+	"type" : "image_picker",
+	"id" : "mobile_back_image",
+	"label" : "Mobile background image"
+
+},
+      {
+
+	"type" : "image_picker",
+	"id" : "desktop_image",
+	"label" : "Product Desktop Image"
+
+},
+{
+
+	"type" : "image_picker",
+	"id" : "mobile_image",
+	"label" : "Product Mobile Image"
+
+},
+	  {
+		"type": "range",
+		"id": "max_width",
+		"min": 100,
+		"max": 1000,
+		"step": 10,
+		"unit": "px",
+		"label": "Image max width",
+		"default": 300
+	  },
+       {
+      "type": "textarea",
+      "id": "hero_header",
+      "label": "Hero Header Text",
+    "info":"Enter '<br>' for manual line breaks."
+  }, 
+  {
+      "type": "color",
+      "id": "hero_header_color",
+      "label": "Hero Header Color"
+  },
+      	  {
+		"type": "select",
+		"id": "heading_tag",
+		"options": [
+		  {
+			"value": "h1",
+			"label": "t:sections.general.settings.heading_tag.options__h1.label"
+		  },
+		  {
+			"value": "h2",
+			"label": "t:sections.general.settings.heading_tag.options__small.label"
+		  }
+		],
+		"default": "h2",
+		"label": "t:sections.general.settings.heading_tag.label"
+	  },
+  {
+        "type": "select",
+        "id": "top_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.top_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.top_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.top_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.top_spacing.options__normal.label"
+          }
+        ],
+        "default": "normal",
+		"label": "t:sections.general.settings.top_spacing.label"
+      },
+	  {
+		"type": "select",
+		"id": "background",
+		"options": [
+		  {
+			"value": "hide",
+			"label": "t:sections.general.settings.background.options__hide.label"
+		  },
+		  {
+			"value": "color",
+			"label": "t:sections.general.settings.background.options__color.label"
+		  },
+		  {
+			"value": "gradient",
+			"label": "t:sections.general.settings.background.options__gradient.label"
+		  }
+		],
+		"default": "hide",
+		"label": "t:sections.general.settings.background.label"
+	  },
+      	  {
+		"type": "color",
+		"id": "color_background",
+		"default": "rgba(0,0,0,0)",
+		"label": "t:sections.general.settings.color_background.label"
+	  },
+      {
+		"type": "color_background",
+        "id": "gradient",
+		"label": "t:sections.general.settings.gradient.label"
+      },
+      	  {
+		"type": "select",
+		"id": "background_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.background_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.background_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.background_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.background_spacing.options__normal.label"
+          }
+        ],
+		"default": "normal",
+		"label": "t:sections.general.settings.background_spacing.label"
+	  },
+            {
+        "type": "checkbox",
+        "id": "remove_bottom_spacing",
+        "default": false,
+		"label": "t:sections.general.settings.remove_bottom_spacing.label"
+            }
+      
+    ],
+    "presets":[
+      {
+      "name": "Banner with text"
+      }
+    ]
+}
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

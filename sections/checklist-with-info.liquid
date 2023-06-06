@@ -1,0 +1,235 @@
+{{ 'checklist-with-info.css' | asset_url | stylesheet_tag }}
+
+{%- capture section_styles -%}
+  
+{%- if section.settings.background != 'hide' -%}
+{%- liquid
+	capture color
+	if section.settings.background == 'color'
+    echo section.settings.color_background
+    else
+    echo section.settings.gradient
+    endif
+    endcapture
+-%}
+{%- if color != "rgba(0,0,0,0)" and color != blank -%}
+#checklist-with-info-{{ section.id }}{
+  --color-section-background: {{ color }};
+}
+{%- endif -%}
+  {%- if section.settings.remove_bottom_spacing -%}
+#checklist-with-info-{{ section.id }}.section-background,
+#checklist-with-info-{{ section.id }} .section-background{
+  padding-bottom: 0;
+}
+{%- endif -%}
+{%- endif -%}
+
+{%- if section.settings.color_description != "rgba(0,0,0,0)" -%}
+{%- endif -%}
+
+
+{%- endcapture -%}
+
+{%- if section_styles != blank -%}
+<style>{{ section_styles }}</style>
+{%- endif -%}
+
+<div id="checklist-with-info-{{ section.id }}" class="checklist_with_info top-spacing-{{ section.settings.top_spacing }} {% if section.settings.background != 'hide' %} section-background section-background--{{ section.settings.background_spacing }}{% endif %}">
+  <div class="container page-width">
+     <div class="grid"> 
+       <div class="col-st-12 col-6 checklist_left_part">
+      {% if section.blocks.size > 0 %}
+      <ul class="p-0 m-0 checklist_text_wrapper">
+      {% for block in section.blocks %}
+        {% if block.settings.title != blank %}
+        <li class="checklist_text font-weight-700 display-flex align-items-center mb-1 {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+          <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16.9437 0.5L6.94369 10.429L3.05646 6.56971L0 9.60506L6.94375 16.5L20 3.53541L16.9437 0.5Z" fill="var(--color-accent)"/>
+</svg>
+
+          {{ block.settings.title }}
+          </li>
+          {% endif %}
+      {% endfor %}
+    </ul>
+      {% endif %}
+       </div>
+       <div class="col-st-12 col-6 checklist_right_part">
+      {% if section.settings.hero_header != blank %}
+      <div class="mb-3 mb-lg-0">
+      <h2 class="checklist_with_info_title {{ section.settings.heading_tag }} m-0" style="color: {{ section.settings.hero_header_color }};">{{ section.settings.hero_header }}</h2>
+      </div>
+      {% endif %}
+       </div>
+     </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+    "name": "Checklist with info",
+    "settings":[
+       {
+      "type": "textarea",
+      "id": "hero_header",
+      "label": "Hero Header Text",
+    "info":"Enter '<br>' for manual line breaks."
+  }, 
+  {
+      "type": "color",
+      "id": "hero_header_color",
+      "label": "Hero Header Color"
+  },
+      	  {
+		"type": "select",
+		"id": "heading_tag",
+		"options": [
+		  {
+			"value": "h1",
+			"label": "t:sections.general.settings.heading_tag.options__h1.label"
+		  },
+		  {
+			"value": "h2",
+			"label": "t:sections.general.settings.heading_tag.options__small.label"
+		  }
+		],
+		"default": "h2",
+		"label": "t:sections.general.settings.heading_tag.label"
+	  },
+      	  {
+		"type": "select",
+		"id": "description_size",
+		"options": [
+          {
+			"value": "body1",
+			"label": "Large"
+          },
+		  {
+			"value": "normal",
+			"label": "t:sections.general.settings.description_size.options__normal.label"
+		  },
+		  {
+			"value": "body2",
+			"label": "t:sections.general.settings.description_size.options__small.label"
+		  }
+		],
+		"default": "normal",
+		"label": "t:sections.general.settings.description_size.label"
+	  },
+  {
+        "type": "select",
+        "id": "top_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.top_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.top_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.top_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.top_spacing.options__normal.label"
+          }
+        ],
+        "default": "normal",
+		"label": "t:sections.general.settings.top_spacing.label"
+      },
+	  {
+		"type": "select",
+		"id": "background",
+		"options": [
+		  {
+			"value": "hide",
+			"label": "t:sections.general.settings.background.options__hide.label"
+		  },
+		  {
+			"value": "color",
+			"label": "t:sections.general.settings.background.options__color.label"
+		  },
+		  {
+			"value": "gradient",
+			"label": "t:sections.general.settings.background.options__gradient.label"
+		  }
+		],
+		"default": "hide",
+		"label": "t:sections.general.settings.background.label"
+	  },
+      	  {
+		"type": "color",
+		"id": "color_background",
+		"default": "rgba(0,0,0,0)",
+		"label": "t:sections.general.settings.color_background.label"
+	  },
+      {
+		"type": "color_background",
+        "id": "gradient",
+		"label": "t:sections.general.settings.gradient.label"
+      },
+      	  {
+		"type": "select",
+		"id": "background_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.background_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.background_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.background_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.background_spacing.options__normal.label"
+          }
+        ],
+		"default": "normal",
+		"label": "t:sections.general.settings.background_spacing.label"
+	  },
+            {
+        "type": "checkbox",
+        "id": "remove_bottom_spacing",
+        "default": false,
+		"label": "t:sections.general.settings.remove_bottom_spacing.label"
+            }
+      
+    ],
+  "blocks": [
+      {
+        "type": "info_block",
+        "name": "Checklist",
+        "limit": 12,
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "title",
+            "label": "Bullet Text"
+          }
+        ]
+      }
+    ],
+    "presets":[
+      {
+      "name": "Checklist with info"
+      }
+    ]
+}
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

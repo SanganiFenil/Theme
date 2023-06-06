@@ -1,0 +1,203 @@
+{{ 'page-with-sidebar.css' | asset_url | stylesheet_tag }}
+
+<div class="top-spacing-{{ section.settings.top_spacing }} {{ section.settings.width }} page_with_sidebar body2">
+    <div class="page_header {{ section.settings.heading_aligment }}">
+                  <div class="grid el_mt_40">
+         <div class="col-st-12 col-9 page_left_content">
+      {%- if section.settings.show_heading -%}<h2 class="mt0 {% if page.content == blank %}mb-0{% else %}mb-5 mb-lg-7{% endif %} page-section__bottom-pading">{{ page.title }}</h2>{%- endif -%}
+            <div class="page_content">
+      {{ page.content }}
+            </div>
+         </div>
+                           <div class="col-st-12 col-3">
+           <div class="contact_sidebar">
+             {% if section.blocks.size > 0 %}
+               {% for block in section.blocks %}
+                 {% case block.type %}
+                    {% when 'text' %}
+                      <div class="contact_text_block {% unless forloop.first %}mt-4 mt-lg-5"{% endunless %}">
+                       {% if block.settings.heading != blank %}
+                        <p class="contact_text_title font-weight-700 mt-0 mb-2 mb-lg-3">{{ block.settings.heading }}</p>
+                       {% endif %}
+                      {% if block.settings.text != blank %}
+                        <div class="mt--first-child-0 contact_text_contact {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+                       {{ block.settings.text }}
+                        </div>
+                     {% endif %}
+                      </div>
+             
+                   {% when 'email' %}
+                      <div class="contact_email {% unless forloop.first %}mt-4 mt-lg-5"{% endunless %}">
+                      <p class="email_title font-weight-700 mt-0 mb-2 mb-lg-3">Email:</p>
+                     <a href="mailto:{{shop.email}}" class="{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">{{shop.email}}</a>
+                      </div>
+
+                   {% when 'mail' %}
+                      <div class="contact_address {% unless forloop.first %}mt-4 mt-lg-5"{% endunless %}">
+                      <p class="address_title font-weight-700 mt-0 mb-2 mb-lg-3">Mail:</p>
+                      <P class="mt-0 {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">{{shop.name}}<br>
+                      {{shop.address.summary}}<br>
+                      {{shop.address.zip}}</P>
+                      </div>
+
+                  {% when 'social_media' %}
+                   <div class="contact_social_media {% unless forloop.first %}mt-4 mt-lg-5"{% endunless %}">
+                     <p class="contact_social_media_title font-weight-700 mt-0 mb-2 mb-lg-3">Social:</p>
+                     {% if block.settings.text != blank %}
+                       <div class="mb-3 mb-lg-3 mt--first-child-0 {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+                       {{ block.settings.text }}
+                       </div>
+                     {% endif %}
+
+          {%- capture social_media -%}
+          {%- for i in (1..10) -%}
+          {%- assign value = 'social_media_' | append: i -%}
+          {%- assign value = settings[value] -%}
+          {%- if value != blank -%}
+          {%- assign icon_name = value | split: '//' | last | replace: 'www.', '' | split: '.' -%}
+          {%- for value in icon_name -%}
+          {%- capture icon -%}{%- render "icons-list-social" icon_name:value -%}{%- endcapture -%}
+          {%- if icon != blank -%}{%- break -%}{%- endif -%}
+          {%- endfor -%}
+          <li><a href="{{ value }}">
+            {{ icon }}
+            <span class="visually-hidden">{{ icon_name }}</span>
+            </a>
+          </li>
+          {%- endif -%}
+          {%- endfor -%}
+          {%- endcapture -%}
+          {%- if social_media != blank -%}
+            <ul class="unstyle-ul contact_social_media_wrap">
+              {{ social_media }}
+            </ul>
+          {%- endif -%}
+   
+
+                   </div>
+  
+                {% endcase %}
+                 {% endfor %}
+               {% endif %}
+           </div>
+        </div>  
+                  </div>
+    </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Page with sidebar",
+  	"tag": "section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:sections.general.settings.header_layout.content"
+      },
+      {
+        "type": "select",
+        "id": "top_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.general.settings.top_spacing.options__none.label"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.general.settings.top_spacing.options__small.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.general.settings.top_spacing.options__medium.label"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.general.settings.top_spacing.options__normal.label"
+          }
+        ],
+        "default": "normal",
+		"label": "t:sections.general.settings.top_spacing.label"
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "t:sections.general.settings.width.options__boxed.label"
+          },
+          {
+            "value": "page-wide",
+            "label": "t:sections.general.settings.width.options__wide.label"
+          }
+        ],
+        "default": "page-width",
+        "label": "t:sections.general.settings.width.label",
+		"info": "t:sections.general.settings.width.info"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_heading",
+        "default": true,
+        "label": "t:sections.main-page.settings.show_heading.label"
+      },
+	  {
+		"type": "select",
+		"id": "heading_aligment",
+		"options": [
+		  {
+			"value": "text-left",
+			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+		  },
+		  {
+			"value": "text-center",
+			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+		  }
+		],
+		"default": "text-center",
+		"label": "t:sections.general.settings.heading_alignment.label"
+	  }
+    ],         
+    "blocks": [
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text"
+          }
+        ]
+      },
+      {
+        "type": "email",
+        "name": "Email",
+        "settings": [
+        ]
+      },
+      {
+        "type": "mail",
+        "name": "Mail",
+        "settings": [
+        ]
+      },
+      {
+        "type": "social_media",
+        "name": "Social media",
+        "settings": [
+           {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

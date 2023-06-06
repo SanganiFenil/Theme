@@ -1,0 +1,122 @@
+{% if template == 'index' %}
+{{ 'homepage-strip-bar.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #homepage-strip-bar--{{ section.id }} .strip_bar_text span{
+    color: {{ section.settings.secondary_text_color }};
+  }
+  #homepage-strip-bar--{{ section.id }} .strip_bar_text,
+  #homepage-strip-bar--{{ section.id }} .strip_bar_content{
+    color: {{ section.settings.color_text }};
+  }
+  #homepage-strip-bar--{{ section.id }}{
+        border-bottom: 1px solid {{ section.settings.border_color }};
+  }
+{% endstyle %}  
+
+<div id="homepage-strip-bar--{{ section.id }}" class="homepage_strip_bar_main desktop--hide" style="background-color: {{ section.settings.color_background }};">
+<div class="homepage_strip_bar page-width">
+  {% if section.blocks.size > 0 %}
+  <div class="homepage_strip_bar_blocks {% if section.blocks.size > 1 %}homepage_strip_bar_slider{% endif %}">
+    {% for block in section.blocks %}
+      <div class="homepage_strip_bar_inner">
+        {% if block.settings.text != blank %}
+        <p class="strip_bar_text body3 mt-0 font-weight-700">{{ block.settings.text }}
+        {% if block.settings.custom_html != blank or block.settings.button_name != blank %}
+          <span class="down_arrow ml-2">></span>
+        {% endif %}
+        </p>
+        {% endif %}
+
+        <div class="strip_bar_content_wrapper">
+        {% if block.settings.custom_html != blank %}
+          <div class="strip_bar_content body4 mt-3">{{ block.settings.custom_html }}</div>
+          {% endif %}
+        {%- if block.settings.button_name != blank -%}
+        <div class="strip_bar_btn btn_wrapper mt-3">
+          <a{% if block.settings.button_url != blank %} href="{{ block.settings.button_url }}"{% endif %}
+             class="btn btn-medium--icon w-full-sp"
+             {% if block.settings.button_url == blank %} aria-disabled="true"{% endif %}>
+            <span>{{ block.settings.button_name }} &gt;</span>
+          </a>
+        </div>
+        {%- endif -%}
+      </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+</div>
+  {% endif %}
+
+{% schema %}
+  {
+    "name": "Homepage Strip Bar",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_text",
+        "default": "#ffffff",
+        "label": "Text color"
+      },
+      {
+        "type": "color",
+        "id": "secondary_text_color",
+        "default": "#fc4f02",
+        "label": "Secondary text color"
+      },
+      {
+		"type": "color",
+		"id": "color_background",
+		"default": "#111111",
+		"label": "Background color"
+	  },
+      {
+		"type": "color",
+		"id": "border_color",
+		"default": "#333333",
+		"label": "Bottom border color"
+	  }
+    ],
+      "blocks": [
+      {
+        "type": "content",
+        "name": "Content",
+        "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+          {
+            "type": "html",
+            "id": "custom_html",
+            "label": "Custom HTML"
+          }, 
+    	  {
+    		"type": "text",
+    		"id": "button_name",
+    		"label": "t:sections.text.settings.button_name.label"
+    	  },
+          {
+            "type": "url",
+            "id": "button_url",
+    		"label": "t:sections.text.settings.button_url.label"
+          }
+        ]
+      }
+    ],
+        "presets": [
+      {
+      	"name": "Homepage Strip Bar"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
