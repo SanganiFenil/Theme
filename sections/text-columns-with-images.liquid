@@ -79,11 +79,6 @@
     height: 48px;
     object-fit: cover;
   }
-    {% if section.settings.texts_aligment == 'text-center' %}
-    #text-columns-img-{{ section.id }} .text-columns-img__icon svg{
-          margin: 0 auto;
-    }  
-  {% endif %}
   {{ section_styles }}
 </style>
 
@@ -136,7 +131,7 @@
             {{ '</' | append: section.settings.heading_tag }}>
             {%- endif -%}
             {%- if block.settings.description != blank -%}
-            <div class="mt10 text-columns-img__description mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+            <div class="mt10 text-columns-img__description section__richtext__editor mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
               {{ block.settings.description }}
             </div>
             {%- endif -%}
@@ -216,7 +211,7 @@
           {{ '</' | append: section.settings.heading_tag }}>
           {%- endif -%}
           {%- if block.settings.description != blank -%}
-          <div class="mt10 text-columns-img__description mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+          <div class="mt10 text-columns-img__description section__richtext__editor mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
             {{ block.settings.description }}
           </div>
           {%- endif -%}
@@ -264,6 +259,9 @@
   {
     "name": "t:sections.text-columns-with-images.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header"]
+    },
     "settings": [
 	  {
 		"type": "text",
@@ -283,16 +281,16 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.heading_alignment.label",
-		"info": "t:sections.text-columns-with-images.settings.heading_alignment.info"
+		"label": "t:sections.general.settings.heading_aligment.label",
+		"info": "t:sections.text-columns-with-images.settings.heading_aligment.info"
 	  },
       {
         "type": "header",
@@ -426,15 +424,15 @@
         "options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
         ],
         "default": "text-center",
-        "label": "t:sections.general.settings.texts_alignment.label"
+        "label": "t:sections.general.settings.texts_aligment.label"
       },
 	  {
 		"type": "select",

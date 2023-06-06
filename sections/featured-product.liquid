@@ -81,7 +81,7 @@
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 
 <section class="top-spacing-{{ section.settings.top_spacing }} {{ section.settings.width }} product-page-section product-page-section--dynamic">
-  <div class="grid">   
+  <div class="grid{% if section.settings.gallery_position == "to right" %} flip-product-content{% endif %}">   
     <div class="col-sp-12 col-st-6 {{ left_column }} product--thumbnail_slider">
       <media-gallery id="MediaGallery-{{ section.id }}"
                      role="region"
@@ -490,8 +490,20 @@
       {%- endif -%}
 
 	  {%- when "buy_buttons" -%}
+      {%- liquid
+          assign enable_sticky_addtocart = block.settings.enable_sticky_addtocart
+          assign gift_card_recipient_feature_active = false
+          if block.settings.show_gift_card_recipient and product.gift_card?
+            assign gift_card_recipient_feature_active = true
+          endif
+    
+          assign show_dynamic_checkout = false
+          if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
+            assign show_dynamic_checkout = true
+          endif
+      -%}
       <div class="product__buttons" {{ block.shopify_attributes }}>
-        <product-form class="product-form">
+        <product-form class="product-form" data-hide-errors="{{ gift_card_recipient_feature_active }}">
 
           <div class="product-form__error-message-wrapper" role="alert" hidden>
             {%- render "icon-attention" -%}
@@ -500,7 +512,11 @@
             
           {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
           <input type="hidden" name="id" value="{{ current_variant.id }}" disabled>
-                    
+            
+          {%- if gift_card_recipient_feature_active -%}
+            {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
+          {%- endif -%}
+            
           <div class="product-form__buttons">
             
             <div class="product-form__add-to-cart">
@@ -549,7 +565,7 @@
                 
               </button>
             </div>
-            {%- if block.settings.show_dynamic_checkout -%}
+            {%- if show_dynamic_checkout -%}
             {%- if settings.terms_and_condition_checkbox -%}
             <terms_and_condition-checkbox>
               <label for="product-terms_and_condition_checkbox-{{ section.id }}" class="checkbox-input body2">
@@ -1034,6 +1050,22 @@
         "label": "t:sections.main-product.settings.media_size.label",
         "info": "t:sections.main-product.settings.media_size.info"
       },
+      {
+        "type": "select",
+        "id": "gallery_position",
+        "options": [
+          {
+            "value": "to left",
+            "label": "t:sections.main-product.settings.gallery_position.options__1.label"
+          },
+          {
+            "value": "to right",
+            "label": "t:sections.main-product.settings.gallery_position.options__2.label"
+          }
+        ],
+        "default": "to left",
+        "label": "t:sections.main-product.settings.gallery_position.label"
+      },
 	  {
 		"type": "select",
 		"id": "heading_aligment",
@@ -1488,6 +1520,13 @@
             "default": true,
             "label": "t:sections.main-product.blocks.buy_buttons.settings.show_dynamic_checkout.label",
             "info": "t:sections.main-product.blocks.buy_buttons.settings.show_dynamic_checkout.info"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_gift_card_recipient",
+            "default": false,
+            "label": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.label",
+            "info": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.info"
           }
         ]
       },

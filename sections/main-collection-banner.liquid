@@ -65,9 +65,9 @@
   <div class="{{ section.settings.width }}">
    
     {%- if section.blocks.size == 0 or collection.image == blank -%}
-    <div class="{% if section.settings.texts_aligment == "text-center" %} justify-content-center{% endif %}">
-      <div class="{{ section.settings.texts_aligment }}">
-        <h2 class="mt0 mb0 {% if section.settings.texts_aligment == "text-left" %}title_strip_line{% endif %}">{{ collection.title }}</h2>
+    <div class="grid{% if section.settings.texts_aligment == "text-center" %} justify-content-center{% endif %}">
+      <div class="col-st-12 col-6 {{ section.settings.texts_aligment }}">
+        <h1 class="mt0 mb0">{{ collection.title }}</h1>
       </div>
     </div>
     {%- else -%}
@@ -186,16 +186,16 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.main-collection-banner.settings.texts_alignment.label",
-		"info": "t:sections.main-collection-banner.settings.texts_alignment.info"
+		"label": "t:sections.main-collection-banner.settings.texts_aligment.label",
+		"info": "t:sections.main-collection-banner.settings.texts_aligment.info"
 	  }
 	],
     "blocks": [
@@ -262,15 +262,15 @@
             "options": [
               {
                 "value": "text-left",
-                "label": "t:sections.general.settings.texts_alignment.options__left.label"
+                "label": "t:sections.general.settings.texts_aligment.options__left.label"
               },
               {
                 "value": "text-center",
-                "label": "t:sections.general.settings.texts_alignment.options__center.label"
+                "label": "t:sections.general.settings.texts_aligment.options__center.label"
               }
             ],
             "default": "text-center",
-            "label": "t:sections.big-image-with-text.settings.texts_alignment.label"
+            "label": "t:sections.big-image-with-text.settings.texts_aligment.label"
           },
           {
             "type": "select",
@@ -278,15 +278,15 @@
             "options": [
               {
                 "value": "text-left-mobile",
-                "label": "t:sections.general.settings.texts_alignment.options__left.label"
+                "label": "t:sections.general.settings.texts_aligment.options__left.label"
               },
               {
                 "value": "text-center-mobile",
-                "label": "t:sections.general.settings.texts_alignment.options__center.label"
+                "label": "t:sections.general.settings.texts_aligment.options__center.label"
               }
             ],
             "default": "text-center-mobile",
-            "label": "t:sections.big-image-with-text.settings.texts_alignment_mobile.label"
+            "label": "t:sections.big-image-with-text.settings.texts_aligment_mobile.label"
           },
           {
             "type": "select",
@@ -294,31 +294,31 @@
             "options": [
               {
                 "value": "align-items-start",
-                "label": "t:sections.big-image-with-text.settings.content_alignment.options__top_left.label"
+                "label": "t:sections.big-image-with-text.settings.content_aligment.options__top_left.label"
               },
               {
                 "value": "align-items-start justify-content-center",
-                "label": "t:sections.big-image-with-text.settings.content_alignment.options__top_center.label"
+                "label": "t:sections.big-image-with-text.settings.content_aligment.options__top_center.label"
               },
               {
                 "value": "align-items-center",
-                "label": "t:sections.big-image-with-text.settings.content_alignment.options__center_left.label"
+                "label": "t:sections.big-image-with-text.settings.content_aligment.options__center_left.label"
               },
               {
                 "value": "align-items-center justify-content-center",
-                "label": "t:sections.big-image-with-text.settings.content_alignment.options__center.label"
+                "label": "t:sections.big-image-with-text.settings.content_aligment.options__center.label"
               },
               {
                 "value": "align-items-end",
-                "label": "t:sections.big-image-with-text.settings.content_alignment.options__bottom_left.label"
+                "label": "t:sections.big-image-with-text.settings.content_aligment.options__bottom_left.label"
               },
               {
                 "value": "align-items-end justify-content-center",
-                "label": "t:sections.big-image-with-text.settings.content_alignment.options__bottom_center.label"
+                "label": "t:sections.big-image-with-text.settings.content_aligment.options__bottom_center.label"
               }
             ],
             "default": "align-items-center justify-content-center",
-            "label": "t:sections.big-image-with-text.settings.content_alignment.label"
+            "label": "t:sections.big-image-with-text.settings.content_aligment.label"
           },
           {
             "type": "checkbox",

@@ -126,15 +126,22 @@
           {%- endcapture -%}
 
           <div class="border__radius" style="--aspect-ratio: {{image_ratio}};">
-            {% assign imagesize = block.settings.image.width | append: 'x' %}
-            <img srcset="{{ block.settings.image | img_url: imagesize }} 1x, {{ block.settings.image | img_url: imagesize, scale: 2 }} 2x"
-                 src="{{ block.settings.image | img_url: imagesize }}"
-                 loading="lazy"
-                 width="{{ block.settings.image.width }}"
-                 height="{{ block.settings.image.height }}"
-                 alt="{{ block.settings.image.alt | escape }}"
-                 {% render "additional-image-attributes" %}
-                 >
+            {%- assign image = block.settings.image -%}
+            {%- assign imagesize = block.settings.image.width | append: 'x' -%}
+            {%- capture srcset -%}{{ block.settings.image | img_url: imagesize }} 1x, {{ block.settings.image | img_url: imagesize, scale: 2 }} 2x{%- endcapture -%}
+            {%- capture image_class -%}{% if settings.animate_image_show %}image-show--fadein{% endif %}{%- endcapture -%}
+            {%- capture animate_image_show -%}{% if settings.animate_image_show %}this.classList.add('image-loaded');{% endif %}{%- endcapture -%}            
+            {{
+              image
+              | image_url: width: image.width
+              | image_tag:
+                loading: 'lazy',
+                width: image.width,
+                height: image.height,
+                srcset: srcset,
+                class: image_class,
+                onload: animate_image_show
+            }}            
           </div>
 
           {%- endif -%}
@@ -203,7 +210,7 @@
       {%- for block in section.blocks -%}
       {%- if block.type == 'text' -%}
       {%- if block.settings.text != blank -%}
-      <div class="image-with-text-bg__texts mt15 mt--first-child-0{% if section.settings.text_size != "normal" %} {{ section.settings.text_size }}{% endif %}" {{ block.shopify_attributes }}>
+      <div class="image-with-text-bg__texts section__richtext__editor mt15 mt--first-child-0{% if section.settings.text_size != "normal" %} {{ section.settings.text_size }}{% endif %}" {{ block.shopify_attributes }}>
         {{ block.settings.text }}
       </div>
       {%- endif -%}
@@ -242,6 +249,9 @@
   {
     "name": "t:sections.image-with-text-bg.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
     "settings": [
       {
         "type": "url",

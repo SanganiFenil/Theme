@@ -1,25 +1,10 @@
- {% unless template == 'cart' or checkout.id != blank %}
-<nav class="list-menu {{ animation }} {% if section.settings.secondary_menu_left != blank and section.settings.header_layout == 'header-layout-classic' %} has-second-nav {% endif %}"> 
-
-  {% if section.settings.secondary_menu_left != blank and section.settings.header_layout == 'header-layout-classic' %}
-    {% assign linklist_2 = section.settings.secondary_menu_left.links %}
-    <ul class="unstyle-ul list-menu--inline secondary_menu-left-nav">
-      {% for link in linklist_2 %}
-        <li>
-          <a href="{{ link.url }}" class="list-menu__item{% if link.current %} list-menu__item--active{% endif %}">
-            <span>{{ link.title }}</span>
-          </a>
-        </li>
-      {% endfor %}
-  </ul>
-  {% endif %}
-  
-  <ul class="unstyle-ul list-menu--inline {% if section.settings.secondary_menu_left != blank and section.settings.header_layout == 'header-layout-classic' %} list-menu--right {% endif %}">
+<nav class="list-menu {{ animation }}">
+  <ul class="unstyle-ul list-menu--inline">
 
     {%- for link in linklist -%}
 
     <li class="list-menu--hover">
-      <a href="{{ link.url }}" class="list-menu__item{% if link.current %} list-menu__item--active{% endif %}">
+      <a href="{{ link.url }}" class="body2 list-menu__item{% if link.current %} list-menu__item--active{% endif %}">
         <span>{{ link.title | escape }}</span>
       </a>
     </li>
@@ -27,4 +12,3 @@
     {%- endfor -%}
   </ul>
 </nav>
-   {% endunless %}

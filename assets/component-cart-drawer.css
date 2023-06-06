@@ -261,11 +261,12 @@ drawer-inner{
   }
   .drawer__cart-item__content {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 70px 1fr;
     gap: 15px;
   }
   .drawer__cart-item__details{
     grid-template-columns: 53.5% 1fr;
+    column-gap: 5px;
   }
   cart-drawer:not(.is-empty) .drawer__footer > *:last-child{
     padding-bottom: 35px;

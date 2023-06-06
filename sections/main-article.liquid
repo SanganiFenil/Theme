@@ -1,13 +1,3 @@
-{%- comment -%}
-This file has been modified by the Yoast SEO for Shopify app.
-You can learn more about this (and learn how to cleanly revert these changes) at https://yoa.st/removing-theme-changes.
-{%- endcomment -%}
-{%- liquid
-	assign disabled_by_yoast_seo = true
-	if content_for_header contains 'yoast-active-script'
-		assign disabled_by_yoast_seo = false
-	endif
--%}
 {{ 'section-blog-post-article.css' | asset_url | stylesheet_tag }}
 {{ 'section-blog-post.css' | asset_url | stylesheet_tag }}
 
@@ -25,7 +15,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
   }
 </style>
 
-<article class="top-spacing-{{ section.settings.top_spacing }}" {% if disabled_by_yoast_seo %}itemscope{% endif %} {% if disabled_by_yoast_seo %}itemtype="http://schema.org/BlogPosting"{% endif %}>
+<article class="top-spacing-{{ section.settings.top_spacing }}" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="page-width">
     
     <div class="grid justify-content-center">
@@ -55,7 +45,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       {%- endif -%}
       <div class="col-st-12 col-6">
         <div class="article-heading {{ section.settings.heading_aligment }} heading--mb">
-          <h1 class="mt0 mb0" {% if disabled_by_yoast_seo %}itemprop="headline"{% endif %}>{{ article.title | escape }}</h1>
+          <h1 class="mt0 mb0" itemprop="headline">{{ article.title | escape }}</h1>
           
           {%- liquid
           if section.settings.showtags and article.tags.size > 0
@@ -77,20 +67,20 @@ You can learn more about this (and learn how to cleanly revert these changes) at
             </li>
             {%- endif -%}
             {%- if section.settings.show_date -%}
-            <li {% if disabled_by_yoast_seo %}itemprop="dateCreated pubdate datePublished"{% endif %}>
+            <li itemprop="dateCreated pubdate datePublished">
               <strong>{{- article.published_at | time_tag: format: "month_day_year" -}}</strong>
             </li>
             {%- endif -%}            
             {%- if section.settings.show_author -%}
-            <li {% if disabled_by_yoast_seo %}itemprop="author"{% endif %} {% if disabled_by_yoast_seo %}itemscope{% endif %} {% if disabled_by_yoast_seo %}itemtype="http://schema.org/Person"{% endif %}>
-              <strong {% if disabled_by_yoast_seo %}itemprop="name"{% endif %}>{{ article.author -}}</strong>
+            <li itemprop="author" itemscope itemtype="http://schema.org/Person">
+              <strong itemprop="name">{{ article.author -}}</strong>
             </li>
             {%- endif -%}
           </ul>
           {%- endif -%}
 
         </div>
-        <div class="article-container image--radius heading--mb" {% if disabled_by_yoast_seo %}itemprop="articleBody"{% endif %}>
+        <div class="article-container image--radius heading--mb" itemprop="articleBody">
           {%- if article.content != '' -%}
           {{ article.content }}
           {%- else -%}
@@ -310,9 +300,6 @@ You can learn more about this (and learn how to cleanly revert these changes) at
 </article>
 
 
-{%- comment -%}Yoast SEO schema control block: start.{%- endcomment -%}
-{%- assign yoast_seo_settings = shop.metafields.yoast_seo.settings.value | default: shop.metafields.yoast_seo.settings -%}
-{%- if disabled_by_yoast_seo or yoast_seo_settings.schema.useTheme.schema or yoast_seo_settings.schema.useTheme.article -%}
 <script type="application/ld+json">
   {
     "@context": "http://schema.org",
@@ -350,9 +337,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       "name": {{ shop.name | json }}
     }
   }
-{%- comment -%}Yoast SEO schema control block: end.{%- endcomment -%}
 </script>
-{%- endif -%}
 
 {% schema %}
   {

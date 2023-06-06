@@ -9,7 +9,7 @@
     Usage:
     {%- render "header-search" show_search:section.settings.show_search, fullwidth: true -%}
 {%- endcomment -%}
- {% unless template == 'cart' or checkout.id != blank %}
+
 {%- if show_search -%}
 {%- if settings.predictive_search_enabled -%}
 <predictive-search class="display-block" data-loading-text="{{ 'accessibility.loading' | t }}">
@@ -49,7 +49,7 @@
       <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
       {%- endif -%}
 
-      <button type="submit" class="search__button field__button field__button__type2 pt-0" aria-label="{{ 'general.search.search' | t }}">
+      <button type="submit" class="search__button field__button field__button__type2" aria-label="{{ 'general.search.search' | t }}">
         {% render "icon-search" %}
       </button>
     </div>
@@ -58,4 +58,3 @@
 </predictive-search>
 {%- endif -%}
 {%- endif -%}
-{% endunless %}

@@ -38,49 +38,64 @@
 <style>{{ section_styles }}</style>
 {%- endif -%}
 
-<div id="ticker-{{ section.id }}" class="top-spacing-{{ section.settings.top_spacing }}{% if section.settings.background != 'hide' %} section-background section-background--{{ section.settings.background_spacing }}{% endif %}"
+{%- if section.settings.url != blank -%}
+{%- assign html_tag_open = '<a' | append: ' href="' | append: section.settings.url | append:'"' -%}
+{%- assign html_tag_close = '</a>' -%}
+{%- else -%}
+{%- assign html_tag_open = '<div' -%}
+{%- assign html_tag_close = '</div>' -%}
+{%- endif -%}
+
+{{ html_tag_open }} id="ticker-{{ section.id }}" class="top-spacing-{{ section.settings.top_spacing }}{% if section.settings.background != 'hide' %} section-background section-background--{{ section.settings.background_spacing }}{% endif %}"
      data-section-name="ticker">  
   {%- capture content -%}
   {%- if section.settings.show_icon == 'image' and section.settings.image != blank -%}
   <div class="ticker__icon">
-    {% assign imagesize = section.settings.image.width | append: 'x' %}
-    <img srcset="{{ section.settings.image | img_url: imagesize }} 1x, {{ section.settings.image | img_url: imagesize, scale: 2 }} 2x"
-         src="{{ section.settings.image | img_url: imagesize }}"
-         loading="lazy"
-         width="{{ section.settings.image.width }}"
-         height="{{ section.settings.image.height }}"
-         alt="{{ section.settings.image.alt | escape }}"
-         >
+    {%- assign image = section.settings.image -%}
+    {%- assign imagesize = section.settings.image.width | append: 'x' -%}
+    {%- capture srcset -%}{{ section.settings.image | img_url: imagesize }} 1x, {{ section.settings.image | img_url: imagesize, scale: 2 }} 2x{%- endcapture -%}
+    {{
+      image
+      | image_url: width: image.width
+      | image_tag:
+        loading: 'lazy',
+        width: image.width,
+        height: image.height,
+        srcset: srcset
+    }}
   </div>
   {%- elsif section.settings.show_icon == 'svg' and section.settings.icon_name != blank -%}
   <div class="ticker__icon svg-icon--small">
     {%- render 'icons-list' icon_name: section.settings.icon_name -%}
   </div>
   {%- endif -%}
-  <p>{{- section.settings.text | replace:'<p>', '' | replace:'</p>', '' -}}</p>
+  <div class="ticker__content section__richtext__editor mt--first-child-0">{{ section.settings.text }}</div>
   {%- endcapture -%}
   
-  <ticker-section class="ticker{% if section.settings.text_size != "normal" %} {{ section.settings.text_size }}{% endif %}" style="--ticker-delay:{{ section.settings.ticker_time }}s">
-    <div class="ticker__container">
+  <ticker-section class="ticker {{ section.settings.text_size }}" style="--ticker-delay:{{ section.settings.ticker_time }}s">
+    <div class="ticker__container {{ section.settings.direction }}">
       {{ content }}
     </div>
   </ticker-section>
 
   <noscript>
-    <div class="ticker{% if section.settings.text_size != "normal" %} {{ section.settings.text_size }}{% endif %}" style="--ticker-delay:{{ section.settings.ticker_time }}s">
+    <div class="ticker {{ section.settings.text_size }}" style="--ticker-delay:{{ section.settings.ticker_time }}s">
       {%- for i in (1..9) -%}
-      <div class="ticker__container ticker--animation">
+      <div class="ticker__container ticker--animation {{ section.settings.direction }}">
         {{ content }}
       </div>
       {%- endfor -%}
     </div>
   </noscript>
-</div>
+{{ html_tag_close }}
 
 {% schema %}
   {
     "name": "t:sections.ticker.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header"]
+    },
     "settings": [
       {
         "type": "header",
@@ -120,6 +135,22 @@
 		"label": "t:sections.ticker.settings.ticker_time.label",
         "default": 10
       },
+	  {
+		"type": "select",
+		"id": "direction",
+		"options": [
+		  {
+			"value": "ticker-to-left",
+			"label": "t:sections.ticker.settings.direction.options__1.label"
+		  },
+		  {
+			"value": "ticker-to-right",
+			"label": "t:sections.ticker.settings.direction.options__2.label"
+		  }        
+		],
+		"default": "ticker-to-left",
+		"label": "t:sections.ticker.settings.direction.label"
+	  },      
       {
         "type": "header",
         "content": "t:sections.ticker.settings.text.label"
@@ -129,21 +160,31 @@
 		"id": "text_size",
 		"options": [
 		  {
-			"value": "ticker-large-text",
-			"label": "t:sections.general.settings.description_size.options__large.label"
+			"value": "ticker-text-2",
+			"label": "t:sections.ticker.settings.text_size.options__1.label"
 		  },
 		  {
-			"value": "normal",
-			"label": "t:sections.general.settings.description_size.options__normal.label"
+			"value": "ticker-text-3",
+			"label": "t:sections.ticker.settings.text_size.options__2.label"
 		  },
 		  {
-			"value": "body2",
-			"label": "t:sections.general.settings.description_size.options__small.label"
-		  }
+			"value": "ticker-text-4",
+			"label": "t:sections.ticker.settings.text_size.options__3.label"
+		  },
+		  {
+			"value": "ticker-text-5",
+			"label": "t:sections.ticker.settings.text_size.options__4.label"
+		  }          
 		],
-		"default": "normal",
+		"default": "ticker-text-5",
 		"label": "t:sections.ticker.settings.text_size.label"
 	  },
+      {
+        "type": "url",
+        "id": "url",
+        "label": "t:sections.ticker.settings.url.label",
+        "info": "t:sections.ticker.settings.url.info"
+      },      
       {
         "type": "richtext",
         "id": "text",
@@ -241,6 +282,10 @@
             "value": "none",
             "label": "t:sections.general.settings.background_spacing.options__none.label"
           },
+          {
+            "value": "xsmall",
+            "label": "t:sections.general.settings.background_spacing.options__xsmall.label"
+          },          
           {
             "value": "small",
             "label": "t:sections.general.settings.background_spacing.options__small.label"

@@ -68,10 +68,6 @@
     padding: 40px 30px;
     min-height: 100%;
   }
-  quick-add-modal .popup-modal__content{
-    width: 95%;
-    max-width: 750px;
-  }
   .popup-modal__content{
     left: 100%;
     transition: left var(--duration-medium) var(--animation-bezier);
@@ -107,8 +103,6 @@
 @media (max-width: 576px){
   quick-add-modal .popup-modal__content{
     padding-top: 50px;
-    width: calc(100% - 30px);
-    max-width: 450px;
   }
 }
 quick-add-modal .product__view-details{

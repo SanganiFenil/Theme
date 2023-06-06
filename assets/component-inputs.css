@@ -97,10 +97,10 @@ button.field__input{
 .search--small{width: 224px;}
 .field-with-icon .field__input{padding-left: 45px;}
 .field-with-icon .field__label{left: 45px;}
-/* .field__input:hover ~ .field__label,
+.field__input:hover ~ .field__label,
 .field:hover .field__label{
   color: var(--component-color-input-text-active, var(--color-input-text));
-} */
+}
 .field.active .field__label,
 .field__input:focus ~ .field__label,
 .field__input:not(:placeholder-shown) ~ .field__label,
@@ -123,19 +123,19 @@ button.field__input{
 .field .field__input.field__input--no-label{
   padding-top: 0px;
 }
-/* .field__input:focus ~ .field__label,
+.field__input:focus ~ .field__label,
 .field__input:-webkit-autofill ~ .field__label{
   color: var(--component-color-input-text-active, var(--color-input-text));
-} */
+}
   
-/* .field__input:active,
+.field__input:active,
 .field__input:focus,
 .field:hover .field__input,
 .field__input:not(:focus):hover{
   color: var(--component-color-input-text-active, var(--color-input-text));
   box-shadow: inset 0 0 0 2px var(--component-color-lines-borders, var(--color-lines-borders));
   background: var(--color-input-background-active);
-} */
+}
 .field__input:-webkit-autofill:focus ~ .field__icon,
 .field__input:-webkit-autofill:hover ~ .field__icon,
 .field__input:-webkit-autofill ~ .field__icon,

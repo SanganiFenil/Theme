@@ -52,23 +52,8 @@
 <div id="featured-collection-{{ section.id }}" class="top-spacing-{{ section.settings.top_spacing }}"
      data-section-name="featured-collection">
   <div class="{{ section.settings.width }} mb--last-child-0">
-   
-   {%- liquid
-  if section.settings.color_subheading != "rgba(0,0,0,0)"
-  assign color_subheading = ' style="--color-subheading:' | append: section.settings.color_subheading | append: ';"'
-  endif
-  if section.settings.color_heading != "rgba(0,0,0,0)"
-  assign color_heading = ' style="color:' | append: section.settings.color_heading | append: ';"'
-  endif
--%}
-{%- if section.settings.subheading != blank or section.settings.heading != blank or show_heading_always -%}
-<div class="heading--mb">
-  <div class="mb--last-child-0 {{ section.settings.heading_aligment }}">
-    {%- if section.settings.subheading != blank -%}<div class="subheading h5"{{ color_subheading }}>{{ section.settings.subheading }}</div>{%- endif -%}
-    {%- if section.settings.heading != blank -%}<h2{{ color_heading }} class="mt0  {% if section.settings.heading_aligment == 'text-left' %}title_strip_line{% endif %}">{{ section.settings.heading }}</h2>{%- endif -%}
-  </div>
-</div>
-{%- endif -%}
+    
+    {%- render "section-heading" -%}
 
     <slider-component class="grid el_mt_40 {{ section.settings.texts_aligment }}{% if section.settings.swipe_on_mobile %} slider slider--phone{% endif %}{% if section.settings.heading_aligment == "text-center" %} justify-content-center--no-phone{% endif %}">
       {%- if section.settings.collection != blank -%}
@@ -205,16 +190,16 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.heading_alignment.label",
-		"info": "t:sections.featured-collection.settings.heading_alignment.info"
+		"label": "t:sections.general.settings.heading_aligment.label",
+		"info": "t:sections.featured-collection.settings.heading_aligment.info"
 	  },
       {
         "type": "header",
@@ -375,15 +360,15 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.texts_alignment.label"
+		"label": "t:sections.general.settings.texts_aligment.label"
 	  },
 	  {
 		"type": "select",

@@ -1,10 +1,10 @@
 <div class="top-spacing-{{ section.settings.top_spacing }} {{ section.settings.width }}">
-    <div class="page_header">
-      {%- if section.settings.show_heading -%}<h2 class="{{ section.settings.heading_tag }} mt0 {% if page.content == blank %}mb-0{% else %}mb-5 mb-lg-7{% endif %} page-section__bottom-pading {{ section.settings.heading_aligment }}">{{ page.title }}</h2>{%- endif -%}
-            <div class="page_content">
+  <div class="grid justify-content-center">
+    <div class="col-md-12 col-6">
+      {%- if section.settings.show_heading -%}<h1 class="mt0 {% if page.content == blank %}mb0{% endif %} page-section__bottom-pading {{ section.settings.heading_aligment }}">{{ page.title }}</h1>{%- endif -%}
       {{ page.content }}
-            </div>
     </div>
+  </div>
 </div>
 
 {% schema %}
@@ -63,45 +63,21 @@
         "default": true,
         "label": "t:sections.main-page.settings.show_heading.label"
       },
-                        	  {
-		"type": "select",
-		"id": "heading_tag",
-		"options": [
-		  {
-			"value": "h1",
-			"label": "H1"
-		  },
-		  {
-			"value": "h2",
-			"label": "H2"
-		  },
-           {
-			"value": "h3",
-			"label": "H3"
-		  },
-           {
-			"value": "h4",
-			"label": "H4"
-		  }
-		],
-		"default": "h2",
-		"label": "t:sections.general.settings.heading_tag.label"
-	  },
 	  {
 		"type": "select",
 		"id": "heading_aligment",
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.heading_alignment.label"
+		"label": "t:sections.general.settings.heading_aligment.label"
 	  }
     ]
   }

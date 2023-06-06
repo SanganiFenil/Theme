@@ -27,21 +27,16 @@
   font-family: Times;
   margin: 0;
 }
-.product-page-section .yotpo-display-wrapper .yotpo-bottomline{
-      margin-top: 8px;
-}
 @media (max-width:576px){
   .rating-star {
     font-size: calc(18px * var(--font-size));
   }
-  .product-page-section .yotpo-display-wrapper .yotpo-bottomline {
-    justify-content: center;
-    float: unset;
-  }
 }
-
-.product-page-section .yotpo-display-wrapper .yotpo-stars{
-  margin-right: 8px;
+.rating-star::before {
+  content: '★★★★★';
+  background: linear-gradient(90deg, var(--color-icon) var(--percent), var(--color-foreground) var(--percent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .rating-count {
   display: inline-block;

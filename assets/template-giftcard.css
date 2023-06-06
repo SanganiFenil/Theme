@@ -477,3 +477,6 @@ h6,.h6{
     height: calc(100% + var(--scale-button-on));
   }
 }
+.gift-card__text-wrapper{
+  text-align:center;
+}

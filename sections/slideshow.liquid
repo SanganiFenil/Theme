@@ -164,34 +164,42 @@
             {% assign imagesize = block.settings.image.width | append: 'x' %}
             {%- if block.settings.image_mobile == blank -%}
             {%- assign image = block.settings.image -%}
-            <img srcset="{%- if image.width >= 360 -%}{{ image | image_url: width: 360 }} 360w,{%- endif -%}
-                         {%- if image.width >= 533 -%}{{ image | image_url: width: 533 }} 533w,{%- endif -%}
-                         {%- if image.width >= 720 -%}{{ image | image_url: width: 720 }} 720w,{%- endif -%}
-                         {%- if image.width >= 940 -%}{{ image | image_url: width: 940 }} 940w,{%- endif -%}
-                         {%- if image.width >= 1066 -%}{{ image | image_url: width: 1066 }} 1066w,{%- endif -%}
-                         {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500 }} 1500w,{%- endif -%}
-                         {{ image | image_url }} {{ image.width }}w"
-                 src="{{ image | image_url: width: settings.page_width }}"
-                 sizes="(min-width: {{ settings.page_width }}px) {% if section.settings.width == "page-fullwidth" %}100vw{% else %}{{ settings.page_width | minus: 20 }}{% endif %}, (min-width: 992px) calc(100vw - 140px), calc(100vw - 40px)"
-                 width="{{ image.width }}"
-                 height="{{ image.height }}"
-                 loading="lazy"
-                 alt="{{ image.alt | escape }}"
-                 {% render "additional-image-attributes" %}
-                 >            
+            {%- capture sizes -%}
+            (min-width: {{ settings.page_width }}px) {% if section.settings.width == "page-fullwidth" %}100vw{% else %}{{ settings.page_width | minus: 20 }}{% endif %}, (min-width: 992px) calc(100vw - 140px), calc(100vw - 40px)
+            {%- endcapture -%}
+            {%- capture image_class -%}{% if settings.animate_image_show %}image-show--fadein{% endif %}{%- endcapture -%}            
+            {%- capture animate_image_show -%}{% if settings.animate_image_show %}this.classList.add('image-loaded');{% endif %}{%- endcapture -%}
+            {{
+              image
+              | image_url: width: image.width
+              | image_tag:
+                loading: 'lazy',
+                width: image.width,
+                height: image.height,
+                sizes: sizes,
+                widths: '360, 533, 720, 940, 1066, 1500',
+                class: image_class,
+                onload: animate_image_show
+            }}          
             {%- else -%}
             {% assign imagesize_mobile = block.settings.image_mobile.width | append: 'x' %}
             <picture>
               <source srcset="{{ block.settings.image_mobile | img_url: imagesize_mobile }} 1x, {{ block.settings.image_mobile | img_url: imagesize_mobile, scale: 2 }} 2x" media="(max-width: 992px) and (min-width: 534px)">
               <source srcset="{{ block.settings.image_mobile | image_url: width: 533 }}" media="(max-width: 533px)">
               <source srcset="{{ block.settings.image | img_url: imagesize }} 1x, {{ block.settings.image | img_url: imagesize, scale: 2 }} 2x" media="(min-width: 993px)">
-              <img src="{{ block.settings.image | img_url: imagesize }}"
-                   loading="lazy"
-                   width="{{ block.settings.image.width }}"
-                   height="{{ block.settings.image.height }}"
-                   alt="{{ block.settings.image.alt | escape }}"
-                   {% render "additional-image-attributes" %}
-                   >
+              {%- assign image = block.settings.image -%}
+              {%- capture image_class -%}{% if settings.animate_image_show %}image-show--fadein{% endif %}{%- endcapture -%}
+              {%- capture animate_image_show -%}{% if settings.animate_image_show %}this.classList.add('image-loaded');{% endif %}{%- endcapture -%}              
+              {{
+                image
+                | image_url: width: image.width
+                | image_tag:
+                  loading: 'lazy',
+                  width: image.width,
+                  height: image.height,
+                  class: image_class,
+                  onload: animate_image_show
+              }}
             </picture>
             {%- endif -%}
           </div>
@@ -254,11 +262,11 @@
             <div class="mt--first-child-0 {{ block.settings.texts_aligment }} {{ section.settings.texts_aligment_mobile }}">
               {%- if block.settings.subheading != blank -%}<div class="h5 slideshow__subheading">{{ block.settings.subheading }}</div>{%- endif -%}
               {%- if block.settings.heading != blank -%}
-              {{ '<' | append: block.settings.heading_tag }} class="slideshow__heading mt20 mb0{% if block.settings.hover_underline %} animation-underline{% endif %}">
+              <p class="slideshow__heading mt20 mb0 {{ block.settings.heading_tag }}{% if block.settings.hover_underline %} animation-underline{% endif %}">
               {%- if heading_link_url != "" -%}<a href="{{ heading_link_url }}" class="clear-underline">{%- endif -%}
               {{ block.settings.heading }}
               {%- if heading_link_url != "" -%}</a>{%- endif -%}
-              {{ '</' | append: block.settings.heading_tag }}>
+              </p>
               {%- endif -%}
               {%- if block.settings.description != blank -%}
               <p class="mt15 slideshow__description{% if block.settings.description_size != "normal" %} {{ block.settings.description_size }}{% endif %}">
@@ -327,6 +335,9 @@
   {
 	"name": "t:sections.slideshow.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
     "settings": [
       {
         "type": "header",
@@ -731,7 +742,7 @@
     		"options": [
     		  {
     			"value": "h1",
-    			"label": "t:sections.general.settings.heading_tag.options__h1.label"
+    			"label": "t:sections.general.settings.heading_tag.options__normal.label"
     		  },
     		  {
     			"value": "h2",

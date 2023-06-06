@@ -97,7 +97,7 @@ color:{{ section.settings.color_description }};
             <span class="progress__percent" data-percent="{{ block.settings.progress }}">0</span><span>%</span>
           </progress-circle>
           {%- if block.settings.text != blank -%}
-          <div class="mt20 progress__text{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+          <div class="mt20 progress__text section__richtext__editor{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
             {{ block.settings.text }}
           </div>
           {%- endif -%}
@@ -115,6 +115,9 @@ color:{{ section.settings.color_description }};
   {
     "name": "t:sections.progress.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
     "settings": [
 	  {
 		"type": "text",
@@ -134,15 +137,15 @@ color:{{ section.settings.color_description }};
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.heading_alignment.label"
+		"label": "t:sections.general.settings.heading_aligment.label"
 	  },
       {
         "type": "header",
@@ -227,15 +230,15 @@ color:{{ section.settings.color_description }};
         "options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.texts_alignment.label"
+		"label": "t:sections.general.settings.texts_aligment.label"
       },
 	  {
 		"type": "select",

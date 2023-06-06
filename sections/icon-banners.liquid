@@ -55,14 +55,18 @@
       
       	  {%- if block.settings.show_icon == 'image' and block.settings.image != blank -%}
           <div class="icon-banners__icon mb20">
-            {% assign imagesize = block.settings.image.width | append: 'x' %}
-            <img srcset="{{ block.settings.image | img_url: imagesize }} 1x, {{ block.settings.image | img_url: imagesize, scale: 2 }} 2x"
-                 src="{{ block.settings.image | img_url: imagesize }}"
-                 loading="lazy"
-                 width="{{ block.settings.image.width }}"
-                 height="{{ block.settings.image.height }}"
-                 alt="{{ block.settings.image.alt | escape }}"
-                 >
+            {%- assign image = block.settings.image -%}
+            {%- assign imagesize = block.settings.image.width | append: 'x' -%}
+            {%- capture srcset -%}{{ block.settings.image | img_url: imagesize }} 1x, {{ block.settings.image | img_url: imagesize, scale: 2 }} 2x{%- endcapture -%}
+            {{
+              image
+              | image_url: width: image.width
+              | image_tag:
+                loading: 'lazy',
+                width: image.width,
+                height: image.height,
+                srcset: srcset
+            }}
           </div>
           {%- elsif block.settings.show_icon == 'svg' and block.settings.icon_name != blank -%}
           <div class="icon-banners__icon mb20 svg-icon--normal">
@@ -116,6 +120,9 @@
   {
     "name": "t:sections.icon-banners.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header","footer"]
+    },
     "settings": [
 	  {
 		"type": "text",
@@ -131,20 +138,20 @@
 	  },
 	  {
 		"type": "select",
-		"id": "heading_alignment",
+		"id": "heading_aligment",
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.heading_alignment.label",
-		"info": "t:sections.icon-banners.settings.heading_alignment.info"
+		"label": "t:sections.general.settings.heading_aligment.label",
+		"info": "t:sections.icon-banners.settings.heading_aligment.info"
 	  },
       {
         "type": "header",
@@ -227,15 +234,15 @@
         "options": [
           {
             "value": "text-left",
-            "label": "t:sections.general.settings.texts_alignment.options__left.label"
+            "label": "t:sections.general.settings.texts_aligment.options__left.label"
           },
           {
             "value": "text-center",
-            "label": "t:sections.general.settings.texts_alignment.options__center.label"
+            "label": "t:sections.general.settings.texts_aligment.options__center.label"
           }
         ],
         "default": "text-left",
-        "label": "t:sections.general.settings.texts_alignment.label"
+        "label": "t:sections.general.settings.texts_aligment.label"
       },
 	  {
 		"type": "select",

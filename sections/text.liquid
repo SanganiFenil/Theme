@@ -65,7 +65,7 @@
         {{ '</' | append: section.settings.heading_tag }}>
         {%- endif -%}
         {%- if section.settings.description != blank -%}
-        <div class="mt0 text__description mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+        <div class="mt0 text__description section__richtext__editor mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
           {{ section.settings.description }}
         </div>
         {%- endif -%}
@@ -90,6 +90,9 @@
   {
     "name": "Text",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header"]
+    },
     "settings": [
 	  {
 		"type": "text",
@@ -175,15 +178,15 @@
         "options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
         ],
         "default": "text-center",
-        "label": "t:sections.general.settings.texts_alignment.label"
+        "label": "t:sections.general.settings.texts_aligment.label"
       },
 	  {
 		"type": "select",

@@ -1,5 +1,5 @@
 {%- if collection.description != blank -%}
-<div class="top-spacing-{{ section.settings.top_spacing }} {% if section.settings.no_header_spacing %}no_header_spacing {% endif %}">
+<div class="top-spacing-{{ section.settings.top_spacing }}">
   <div class="{{ section.settings.width }} {{ section.settings.texts_aligment }} mt--first-child-0">
 	{{ collection.description }}
   </div>
@@ -19,12 +19,6 @@
         "type": "header",
         "content": "t:sections.general.settings.header_layout.content"
       },
-      {
-  "type": "checkbox",
-  "id": "no_header_spacing",
-  "label": "Remove Margins Below Headers",
-  "default": false
-},
       {
         "type": "select",
         "id": "top_spacing",
@@ -76,15 +70,15 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-left",
-		"label": "t:sections.main-collection-description.settings.texts_alignment.label"
+		"label": "t:sections.main-collection-description.settings.texts_aligment.label"
 	  }
 	]
   }

@@ -18,6 +18,9 @@ cart-notification{
 .cart-notification__links > .cart-notification__links__continue{
   margin-top: var(--padding3);
 }
+.cart-notification-product__details{
+  word-break: break-all;
+}
 .cart-notification-product__details > *:not(:first-child),
 .cart-notification-product__details > dl > *:not(:first-child){
   margin-top: 5px;

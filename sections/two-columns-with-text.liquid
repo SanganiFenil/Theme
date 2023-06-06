@@ -106,14 +106,18 @@
           {%- else -%}
           {%- capture image_ratio -%}{{ block.settings.image.aspect_ratio }}{%- endcapture -%}
           <div class="border__radius" style="--aspect-ratio: {{- image_ratio -}};">
-            {% assign imagesize = block.settings.image.width | append: 'x' %}
-            <img srcset="{{ block.settings.image | img_url: imagesize }} 1x, {{ block.settings.image | img_url: imagesize, scale: 2 }} 2x"
-                 src="{{ block.settings.image | img_url: imagesize }}"
-                 loading="lazy"
-                 width="{{ block.settings.image.width }}"
-                 height="{{ block.settings.image.height }}"
-                 alt="{{ block.settings.image.alt | escape }}"
-                 >
+            {%- assign image = block.settings.image -%}
+            {%- assign imagesize = block.settings.image.width | append: 'x' -%}
+            {%- capture srcset -%}{{ block.settings.image | img_url: imagesize }} 1x, {{ block.settings.image | img_url: imagesize, scale: 2 }} 2x{%- endcapture -%}
+            {{
+              image
+              | image_url: width: image.width
+              | image_tag:
+                loading: 'lazy',
+                width: image.width,
+                height: image.height,
+                srcset: srcset
+            }}
           </div>
           {%- endif -%}
         </div>
@@ -167,19 +171,23 @@
                 endif
             -%}
             {%- assign image = block.settings.image -%}
-            <img srcset="{%- if image.width >= 400 -%}{{ image | image_url: width: 400 }} 400w,{%- endif -%}
-                         {%- if image.width >= 470 -%}{{ image | image_url: width: 470 }} 470w,{%- endif -%}
-                         {%- if image.width >= 620 -%}{{ image | image_url: width: 620 }} 620w,{%- endif -%}
-                         {%- if image.width >= 860 -%}{{ image | image_url: width: 860 }} 860w,{%- endif -%}
-                         {{ image | image_url }} {{ image.width }}w"
-                 src="{{ image | image_url: width: 400 }}"
-                 sizes="(min-width: 1440px) {% if page_is_wide %}calc((100vw - {{ settings.spacing_grid_horizontal }}px) / 2){% else %}calc(({{ settings.page_width }}px - 20px) / 2){% endif %},(min-width: 993px) calc((100vw - 140px) / 2),(min-width: 577px) calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2),calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2)"
-                 width="{{ image.width }}"
-                 height="{{ image.height }}"
-                 loading="lazy"
-                 alt="{{ image.alt | escape }}"
-                 {% render "additional-image-attributes" %}
-                 >
+            {%- capture sizes -%}
+            (min-width: 1440px) {% if page_is_wide %}calc((100vw - {{ settings.spacing_grid_horizontal }}px) / 2){% else %}calc(({{ settings.page_width }}px - 20px) / 2){% endif %},(min-width: 993px) calc((100vw - 140px) / 2),(min-width: 577px) calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2),calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2)
+            {%- endcapture -%}
+            {%- capture image_class -%}{% if settings.animate_image_show %}image-show--fadein{% endif %}{%- endcapture -%}            
+            {%- capture animate_image_show -%}{% if settings.animate_image_show %}this.classList.add('image-loaded');{% endif %}{%- endcapture -%}
+            {{
+              image
+              | image_url: width: image.width
+              | image_tag:
+                loading: 'lazy',
+                width: image.width,
+                height: image.height,
+                sizes: sizes,
+                widths: '400, 470, 620, 860',
+                class: image_class,
+                onload: animate_image_show
+            }}
           </div>
 
           {%- endif -%}
@@ -194,7 +202,7 @@
           {{ '</' | append: section.settings.heading_tag }}>
           {%- endif -%}
           {%- if block.settings.description != blank -%}
-          <div class="mt10 two-columns-text__description mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+          <div class="mt10 two-columns-text__description section__richtext__editor mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
             {{ block.settings.description }}
           </div>
           {%- endif -%}
@@ -223,6 +231,9 @@
   {
     "name": "t:sections.two-columns-with-text.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
     "settings": [
 	  {
 		"type": "text",
@@ -248,15 +259,15 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.two-columns-with-text.settings.heading_alignment.label"
+		"label": "t:sections.two-columns-with-text.settings.heading_aligment.label"
 	  },
       {
         "type": "header",
@@ -341,15 +352,15 @@
         "options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
         ],
         "default": "text-center",
-        "label": "t:sections.general.settings.texts_alignment.label"
+        "label": "t:sections.general.settings.texts_aligment.label"
       },
 	  {
 		"type": "select",
@@ -540,14 +551,12 @@
           {
             "type": "image_picker",
             "id": "image",
-            "label": "t:sections.general.settings.image.label",
-			"info": "t:sections.text-columns-with-images.blocks.blurb.settings.image.info"
+            "label": "t:sections.general.settings.image.label"
           },
           {
             "type": "url",
             "id": "url",
-			"label": "t:sections.text-columns-with-images.blocks.blurb.settings.url.label",
-			"info": "t:sections.text-columns-with-images.blocks.blurb.settings.url.info"
+			"label": "t:sections.text-columns-with-images.blocks.blurb_icon.settings.url.label"
           },
           {
             "type": "text",

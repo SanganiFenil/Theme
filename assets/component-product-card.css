@@ -5,22 +5,6 @@
   text-decoration: none;
   word-break: break-word;
 }
-@media (min-width:993px){
-  .product-card__heading{
-      min-height: 54px;
-  }
-}
-@media (min-width:577px) and (max-width: 992px){
-  .product-card__heading{
-      min-height: 42px;
-  }
-}
-@media (max-width: 576px) {
-  .collection .product-card__heading{
-      min-height: 42px;
-  }
-}
-
 .product-card__meta{
   color: var(--color-base);
   text-transform: uppercase;

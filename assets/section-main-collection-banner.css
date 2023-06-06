@@ -39,7 +39,6 @@
 .big-image-with-text .image-hover-scaling__image{
   z-index: 1;
 }
-
 @media (min-width: 993px){
   .big-image-with-text [style*="--aspect-ratio"]{
     height: 100%;

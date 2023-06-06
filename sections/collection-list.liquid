@@ -91,9 +91,9 @@
         <div class="col-sp-{{ section.settings.mobile_grid }} {{ section.settings.grid }}{% if section.settings.swipe_on_mobile %} slider__slide{% endif %}" {{ block.shopify_attributes }}>
 
           {%- if block.settings.collection == blank -%}
-          <div class="collection-list-{{ colection_type }}{% if settings.enable_zoom_animation %} image-hover-scaling-up{% endif %} hover-area {% if settings.product_card_image_resize == "contain" %}product-card-image--contain{% endif %}">
+          <div class="collection-list-{{ colection_type }}{% if settings.enable_zoom_animation %} image-hover-scaling-up{% endif %} hover-area">
             <div class="image-hover-scaling__image placeholder__svg--bg border__radius{% if section.settings.design_type == "text-below-image" %}-top{% endif %}"{% if section.settings.image_ratio != 'auto' %} style="--aspect-ratio: {{section.settings.image_ratio}};"{% endif %}>
-
+              
               {%- capture placeholder_name -%}
               {%- cycle 'collection-1', 'collection-2', 'collection-3', 'collection-4', 'collection-5', 'collection-6' -%}
               {%- endcapture -%}
@@ -117,7 +117,7 @@
           endif
           -%}
 
-          <a href="{{ href }}" class="collection-list-{{ colection_type }} a--remove-hover-underline{% if settings.enable_zoom_animation %} image-hover-scaling-up{% endif %} hover-area {% if settings.product_card_image_resize == "contain" %} product-card-image--contain{% endif %}">
+          <a href="{{ href }}" class="collection-list-{{ colection_type }} a--remove-hover-underline{% if settings.enable_zoom_animation %} image-hover-scaling-up{% endif %} hover-area">
             {%- capture image_ratio -%}
             {%- if section.settings.image_ratio == 'auto' -%}
             {%- if block.settings.image != blank -%}{{block.settings.image.aspect_ratio}}
@@ -142,21 +142,24 @@
                   endif
               -%}
               {%- if block.settings.image != blank -%}
-              {%- assign image = block.settings.image -%}    
-              <img srcset="{%- if image.width >= 180 -%}{{ image | image_url: width: 180 }} 180w,{%- endif -%}
-                           {%- if image.width >= 400 -%}{{ image | image_url: width: 390 }} 400w,{%- endif -%}
-                           {%- if image.width >= 470 -%}{{ image | image_url: width: 470 }} 470w,{%- endif -%}
-                           {%- if image.width >= 620 -%}{{ image | image_url: width: 620 }} 620w,{%- endif -%}
-                           {%- if image.width >= 1240 -%}{{ image | image_url: width: 1240 }} 1240w,{%- endif -%}
-                           {{ image | image_url }} {{ image.width }}w"
-                   src="{{ image | image_url: width: 400 }}"
-                   sizes="(min-width: 1440px) {% if page_is_wide %}calc((100vw - {{ settings.spacing_grid_horizontal }}px) / 2){% else %}calc(({{ settings.page_width }}px - 20px) / 2){% endif %},(min-width: 993px) calc((100vw - 140px) / 2),(min-width: 577px) calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2),calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2)"
-                   width="{{ image.width }}"
-                   height="{{ image.height }}"
-                   loading="lazy"
-                   alt="{{ image.alt | escape }}"
-                   {% render "additional-image-attributes" %}
-                   >
+              {%- assign image = block.settings.image -%}
+              {%- capture sizes -%}
+              (min-width: 1440px) {% if page_is_wide %}calc((100vw - {{ settings.spacing_grid_horizontal }}px) / 2){% else %}calc(({{ settings.page_width }}px - 20px) / 2){% endif %},(min-width: 993px) calc((100vw - 140px) / 2),(min-width: 577px) calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2),calc((100vw - 40px - {{ settings.spacing_grid_horizontal }}px) / 2)
+              {%- endcapture -%}
+              {%- capture image_class -%}{% if settings.animate_image_show %}image-show--fadein{% endif %}{%- endcapture -%}
+              {%- capture animate_image_show -%}{% if settings.animate_image_show %}this.classList.add('image-loaded');{% endif %}{%- endcapture -%}
+              {{
+                image
+                | image_url: width: image.width
+                | image_tag:
+                  loading: 'lazy',
+                  width: image.width,
+                  height: image.height,
+                  sizes: sizes,
+                  widths: '180, 400, 470, 620, 1240',
+                  class: image_class,
+                  onload: animate_image_show
+              }}
               {%- elsif block.settings.collection.featured_image != blank -%}
               {%- assign image = block.settings.collection.featured_image -%}    
               <img srcset="{%- if image.width >= 180 -%}{{ image | image_url: width: 180 }} 180w,{%- endif -%}
@@ -274,16 +277,16 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.heading_alignment.label",
-		"info": "t:sections.general.settings.heading_alignment.info"
+		"label": "t:sections.general.settings.heading_aligment.label",
+		"info": "t:sections.general.settings.heading_aligment.info"
 	  },
       {
         "type": "header",
@@ -445,15 +448,15 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.texts_alignment.label"
+		"label": "t:sections.general.settings.texts_aligment.label"
 	  },
       {
         "type": "checkbox",
@@ -473,15 +476,15 @@
 		"options": [
 		  {
 			"value": "text-left-mobile",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center-mobile",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center-mobile",
-		"label": "t:sections.collection-list.settings.texts_alignment_mobile.label"
+		"label": "t:sections.collection-list.settings.texts_aligment_mobile.label"
 	  },
       {
         "type": "header",

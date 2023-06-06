@@ -48,7 +48,8 @@
 }
 {%- endif -%}
 {%- if section.settings.color_lines != "rgba(0,0,0,0)" -%}
-#accordion-{{ section.id }} .chm-toggle:nth-child(n+2):before{
+#accordion-{{ section.id }} .chm-toggle:nth-child(n+2) summary:after,
+#accordion-{{ section.id }} .top-and-bottom-lines .chm-toggle summary:after{
   --color-base:{{section.settings.color_lines}};
   opacity: 1;
 }
@@ -92,7 +93,7 @@
               {%- render "icon-arrow-down-small" -%}
             </div>
           </summary>
-          <div class="mt0 chm-toggle__content mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
+          <div class="mt0 section__richtext__editor chm-toggle__content mt--first-child-0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
             {{ block.settings.description }}
           </div>
         </details>
@@ -108,6 +109,9 @@
   {
     "name": "t:sections.accordion.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header","footer"]
+    },
     "settings": [
       {
         "type": "checkbox",

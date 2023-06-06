@@ -3,7 +3,6 @@
 <noscript>{{ 'component-inputs.css' | asset_url | stylesheet_tag }}</noscript>
 {%- else -%}
 {{ 'component-inputs.css' | asset_url | stylesheet_tag }}
-{{ 'contact-form.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
 {%- capture section_styles -%}
 {%- if section.settings.background != 'hide' -%}
@@ -105,13 +104,9 @@
       assign color_text = ' style="color:' | append: section.settings.color_text | append: ';"'
       endif
     -%}
-
-            <div class="grid el_mt_40">
-         <div class="col-st-12 col-9">
-           
     {%- if section.settings.subheading != blank or section.settings.heading != blank or section.settings.text != blank -%}
-    <div class="heading--mb">
-      <div class="mb--last-child-0 {{ section.settings.heading_aligment }}">
+    <div class="grid justify-content-center heading--mb">
+      <div class="col-6 col-st-12 mb--last-child-0 {{ section.settings.heading_aligment }}">
         {%- if section.settings.subheading != blank -%}<div class="subheading h5"{{ color_subheading }}>{{ section.settings.subheading }}</div>{%- endif -%}
         {%- if section.settings.heading != blank -%}<h2{{ color_heading }} class="mt0 mb15">{{ section.settings.heading }}</h2>{%- endif -%}
         {%- if section.settings.text != blank -%}<p{{ color_text }} class="mt0{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">{{ section.settings.text }}</p>{%- endif -%}
@@ -119,7 +114,8 @@
     </div>
     {%- endif -%}
 
- 
+    <div class="grid justify-content-center">
+      <div class="col-st-12 col-6">
         {%- form 'contact', id: 'ContactForm' -%}
         <div class="grid">
           <div class="col-sp-12 col-6">
@@ -196,7 +192,7 @@
             </div>
           </div>
           <div class="col-12 text-center mt30">
-            <button type="submit" class="btn btn_zoom btn--secondary w-full">
+            <button type="submit" class="btn btn_zoom btn--secondary w-full-sp">
               <span>{{ 'templates.contact.form.send' | t }}</span>
             </button>
             {%- if form.posted_successfully? -%}
@@ -205,82 +201,8 @@
           </div>
         </div>
         {%- endform -%}
-   
-         </div>
-                 
-         <div class="col-st-12 col-3">
-           <div class="contact_sidebar">
-             {% if section.blocks.size > 0 %}
-               {% for block in section.blocks %}
-                 {% case block.type %}
-                    {% when 'text' %}
-                      <div class="contact_text_block {% unless forloop.first %}mt-4 mt-lg-5"{% endunless %}">
-                       {% if block.settings.heading != blank %}
-                        <p class="contact_text_title font-weight-700 mt-0 mb-2 mb-lg-3">{{ block.settings.heading }}</p>
-                       {% endif %}
-                      {% if block.settings.text != blank %}
-                        <div class="mt--first-child-0 contact_text_contact {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
-                       {{ block.settings.text }}
-                        </div>
-                     {% endif %}
-                      </div>
-             
-                   {% when 'email' %}
-                      <div class="contact_email {% unless forloop.first %}mt-4 mt-lg-5"{% endunless %}">
-                      <p class="email_title font-weight-700 mt-0 mb-2 mb-lg-3">Email:</p>
-                     <a href="mailto:{{shop.email}}" class="{% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">{{shop.email}}</a>
-                      </div>
-
-                   {% when 'mail' %}
-                      <div class="contact_address {% unless forloop.first %}mt-4 mt-lg-5"{% endunless %}">
-                      <p class="address_title font-weight-700 mt-0 mb-2 mb-lg-3">Mail:</p>
-                      <P class="mt-0 {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">{{shop.name}}<br>
-                      {{shop.address.summary}}<br>
-                      {{shop.address.zip}}</P>
-                      </div>
-
-                  {% when 'social_media' %}
-                   <div class="contact_social_media {% unless forloop.first %}mt-4 mt-lg-5"{% endunless %}">
-                     <p class="contact_social_media_title font-weight-700 mt-0 mb-2 mb-lg-3">Social:</p>
-                     {% if block.settings.text != blank %}
-                       <div class="mb-3 mb-lg-3 mt--first-child-0 {% if section.settings.description_size != "normal" %} {{ section.settings.description_size }}{% endif %}">
-                       {{ block.settings.text }}
-                       </div>
-                     {% endif %}
-
-          {%- capture social_media -%}
-          {%- for i in (1..10) -%}
-          {%- assign value = 'social_media_' | append: i -%}
-          {%- assign value = settings[value] -%}
-          {%- if value != blank -%}
-          {%- assign icon_name = value | split: '//' | last | replace: 'www.', '' | split: '.' -%}
-          {%- for value in icon_name -%}
-          {%- capture icon -%}{%- render "icons-list-social" icon_name:value -%}{%- endcapture -%}
-          {%- if icon != blank -%}{%- break -%}{%- endif -%}
-          {%- endfor -%}
-          <li><a href="{{ value }}">
-            {{ icon }}
-            <span class="visually-hidden">{{ icon_name }}</span>
-            </a>
-          </li>
-          {%- endif -%}
-          {%- endfor -%}
-          {%- endcapture -%}
-          {%- if social_media != blank -%}
-            <ul class="unstyle-ul contact_social_media_wrap">
-              {{ social_media }}
-            </ul>
-          {%- endif -%}
-   
-
-                   </div>
-  
-                {% endcase %}
-                 {% endfor %}
-               {% endif %}
-           </div>
-        </div>
-            </div>
+      </div>
+    </div>
 
     {% if section.settings.background != 'hide' and section.settings.background_width == "content_width" %}</div>{%- endif -%}
   </div>
@@ -290,6 +212,9 @@
   {
     "name": "t:sections.contact-form.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header"]
+    },
     "settings": [
 	  {
 		"type": "text",
@@ -315,15 +240,15 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.heading_alignment.label"
+		"label": "t:sections.general.settings.heading_aligment.label"
 	  },
       {
         "type": "header",
@@ -516,47 +441,6 @@
 		"label": "t:sections.general.settings.remove_bottom_spacing.label"
       }
 	],
-          "blocks": [
-      {
-        "type": "text",
-        "name": "Text",
-        "settings": [
-          {
-            "type": "text",
-            "id": "heading",
-            "label": "Heading"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text"
-          }
-        ]
-      },
-      {
-        "type": "email",
-        "name": "Email",
-        "settings": [
-        ]
-      },
-      {
-        "type": "mail",
-        "name": "Mail",
-        "settings": [
-        ]
-      },
-      {
-        "type": "social_media",
-        "name": "Social media",
-        "settings": [
-           {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text"
-          }
-        ]
-      }
-    ],
     "presets": [
       {
       	"name": "t:sections.contact-form.presets.name"

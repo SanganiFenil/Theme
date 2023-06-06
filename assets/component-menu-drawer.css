@@ -33,18 +33,24 @@ details[open] .drawer__outer-background{
   display: flex;
   flex-direction: column;
   position: fixed;
-  width: 100%;
-  max-width: 300px;
+  width: calc(100% - 60px);
+  max-width: 330px;
   top: 0;
   left: 0;
   bottom: 0;
-  background: var(--color-section-background);
+  background: var(--color-body-background);
   z-index: 10;
   overflow-x: hidden;
   transform: translateX(-100%);
 }
 .menu-drawer a{
   text-decoration: none;
+}
+@media (min-width: 577px) and (max-width: 992px){
+  .menu-drawer{
+    width: calc(100% / 2);
+    max-width: calc(100% / 2);
+  }
 }
 
 .drawer__header{
@@ -69,9 +75,9 @@ details[open] .drawer__outer-background{
 .drawer__content-pad{
   padding: var(--padding2);
 }
-/* .drawer__content-pad > *:not(:first-child){
+.drawer__content-pad > *:not(:first-child){
   margin-top: var(--padding4);
-} */
+}
 .drawer__content-pad > .menu-drawer__navigation + *{
   margin-top: calc(var(--padding4) - 13px);
 }
@@ -110,19 +116,15 @@ details[open] > .menu-drawer__submenu{
 .no-js .menu-drawer__submenu .menu-drawer__submenu-content > *:first-child{
   display: none;
 }
+.menu-drawer__navigation ul{
+  margin-top: -13px;
+}
 .menu-drawer__menu-item{
   display: inline-flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 13px 0;
   width: 100%;
-  color: var(--color-secondary-menu-text);
-      font-size: 16px;
-    line-height: 1.5;
-      justify-content: space-between;
-    column-gap: 10px;
-}
-.menu-drawer .autoship-link .subscription_discount_text_wrap{
-  column-gap: 10px;
+  color: var(--color-base);
 }
 .menu-drawer__menu-item svg:first-child{
   max-width: 20px;
@@ -163,47 +165,6 @@ details[open] > .menu-drawer__submenu{
 .menu-drawer__menu-item.h5 .badge__menu{
   top: unset;
 }
-.menu-drawer svg.theme-icon path, .menu-drawer svg.theme-icon rect{
-      fill: var(--color-header-text);
-}
-.menu-drawer .autoship-link .subscription_discount_text{
-    color: var(--color-secondary-menu-text);
-    text-transform: none;
-  font-size: 16px;
-    line-height: 1.5;
-}
-.menu-drawer .drawer__content .arrow-right{
-      font-weight: 400;
-    font-size: 16px;
-        line-height: 1;
-}
-.menu-drawer .drawer__content hr{
-    margin: 16px 0;
-    border-top: 0;
-    border-color: var(--border-color);
-}
-.menu-drawer .drawer__content .sidebar-menu-title{
-  font-weight: 700;
-  font-size: 18px;
-    line-height: 1.2;
-      margin-top: 0;
-    margin-bottom: 8px;
-}
-.menu-drawer .sidebar-menu-title .sidebar-menu-title-link{
-  color: var(--color-header-text);
-  column-gap: 10px;
-}
-.menu-drawer .drawer__content-pad{
-  padding: 16px;
-}
-.menu-drawer .menu_drawer_address{
-  color: var(--color-secondary-menu-text);
-  font-size: 14px;
-    line-height: 1.5;
-}
-.menu-drawer a:hover{
- color: var(--color-accent);
-}
 
 @media (min-width:577px) and (max-width: 992px){
   .drawer__header,
@@ -216,16 +177,16 @@ details[open] > .menu-drawer__submenu{
 .menu-drawer__menu-item--active{
   position: relative;
 }
-/* .menu-drawer__menu-item--active:before{
+.menu-drawer__menu-item--active:before{
   content: "";
   position: absolute;
   left: -30px;
   top: 0;
   width: calc(100% + 60px);
   height: 100%;
-  background: var(--color-header-background);
+  background: var(--color-section-background);
   z-index: -1;
-} */
+}
 @media (max-width: 992px){
   .drawer__icon-menu:hover{
     background: var(--mobile-focus-color);
@@ -235,7 +196,7 @@ details[open] > .menu-drawer__submenu{
   .menu-drawer__menu-item:hover{
     position: relative;
   }
-/*   .menu-drawer__menu-item:hover:before{
+  .menu-drawer__menu-item:hover:before{
     content: "";
     position: absolute;
     top: 0;
@@ -245,7 +206,7 @@ details[open] > .menu-drawer__submenu{
     height: 100%;
     background: var(--mobile-focus-color);
 	z-index: -1;
-  } */
+  }
   .drawer__icon-account:hover:before{
     content: "";
     position: absolute;
@@ -269,17 +230,4 @@ details[open] > .menu-drawer__submenu{
     background: var(--mobile-focus-color);
 	z-index: -1;
   }
-}
-
-@media (max-width: 576px){
-  .menu-drawer__menu-item, .menu-drawer .autoship-link .subscription_discount_text{
-        font-size: 14px;
-  }
-  .menu-drawer .drawer__content .sidebar-menu-title{
-    font-size: 16px;
-  }
-  .menu-drawer .menu_drawer_address{
-  font-size: 12px;
-
-}
 }

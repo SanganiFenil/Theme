@@ -97,19 +97,20 @@
       {%- liquid assign image_ratio = block.settings.image.aspect_ratio -%}
       <div style="--aspect-ratio: {{image_ratio}};">
         {%- assign image = block.settings.image -%}
-        <img srcset="{%- if image.width >= 400 -%}{{ image | image_url: width: 400 }} 400w,{%- endif -%}
-                     {%- if image.width >= 580 -%}{{ image | image_url: width: 580 }} 580w,{%- endif -%}
-                     {%- if image.width >= 1240 -%}{{ image | image_url: width: 1240 }} 1240w,{%- endif -%}
-                     {%- if image.width >= 1920 -%}{{ image | image_url: width: 1920 }} 1920w,{%- endif -%}
-                     {{ image | image_url }} {{ image.width }}w"
-             src="{{ image | image_url: width: 580 }}"
-             sizes="100vw"
-             width="{{ image.width }}"
-             height="{{ image.height }}"
-             loading="lazy"
-             alt="{{ image.alt | escape }}"
-             {% render "additional-image-attributes" %}
-             >
+        {%- capture image_class -%}{% if settings.animate_image_show %}image-show--fadein{% endif %}{%- endcapture -%}            
+        {%- capture animate_image_show -%}{% if settings.animate_image_show %}this.classList.add('image-loaded');{% endif %}{%- endcapture -%}
+        {{
+          image
+          | image_url: width: image.width
+          | image_tag:
+            loading: 'lazy',
+            width: image.width,
+            height: image.height,
+            sizes: '100vw',
+            widths: '400, 580, 1240, 1920',
+            class: image_class,
+            onload: animate_image_show
+        }}
       </div>
       {%- endif -%}
       {{ html_tag_close }}
@@ -149,7 +150,7 @@
     {%- for block in section.blocks -%}
     {%- if block.type == 'text' -%}
     {%- if block.settings.text != blank -%}
-    <div class="chm-map__texts mt15 mt--first-child-0{% if section.settings.text_size != "normal" %} {{ section.settings.text_size }}{% endif %}" {{ block.shopify_attributes }}>
+    <div class="chm-map__texts section__richtext__editor mt15 mt--first-child-0{% if section.settings.text_size != "normal" %} {{ section.settings.text_size }}{% endif %}" {{ block.shopify_attributes }}>
       {{ block.settings.text }}
     </div>
     {%- endif -%}
@@ -194,6 +195,9 @@
   {
     "name": "t:sections.map.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header","footer"]
+    },
     "settings": [
       {
         "type": "url",
@@ -276,19 +280,19 @@
 		"options": [
 		  {
 			"value": "align-self-start",
-			"label": "t:sections.image-with--general.settings.content_alignment.options__top.label"
+			"label": "t:sections.image-with--general.settings.content_aligment.options__top.label"
 		  },
 		  {
 			"value": "align-self-center",
-			"label": "t:sections.image-with--general.settings.content_alignment.options__center.label"
+			"label": "t:sections.image-with--general.settings.content_aligment.options__center.label"
 		  },
 		  {
 			"value": "align-self-end",
-			"label": "t:sections.image-with--general.settings.content_alignment.options__bottom.label"
+			"label": "t:sections.image-with--general.settings.content_aligment.options__bottom.label"
 		  }
 		],
 		"default": "align-self-start",
-		"label": "t:sections.image-with--general.settings.content_alignment.label"
+		"label": "t:sections.image-with--general.settings.content_aligment.label"
 	  },
       {
         "type": "select",
@@ -296,15 +300,15 @@
         "options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-left",
-		"label": "t:sections.general.settings.texts_alignment.label"
+		"label": "t:sections.general.settings.texts_aligment.label"
 	  },
 	  {
 		"type": "select",

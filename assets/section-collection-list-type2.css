@@ -9,11 +9,6 @@
 .collection-list-type2__icon{
   display: none;
 }
-.product-card-image--contain [style*="--aspect-ratio"] img,
-.product-card-image--contain [style*="--aspect-ratio"].placeholder__svg--bg svg{
-  object-fit: contain; 
-}
- 
 @media (min-width: 577px){
   .collection-list-type2-pad{
     position: absolute;

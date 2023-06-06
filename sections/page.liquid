@@ -2,9 +2,7 @@
 <div class="top-spacing-{{ section.settings.top_spacing }} {{ section.settings.width }}">
   <div class="grid justify-content-center">
     <div class="col-md-12 col-6">
-      <div class="page_content">
       {{ section.settings.page.content }}
-      </div>
     </div>
   </div>
 </div>
@@ -13,6 +11,9 @@
   {
     "name": "t:sections.page.name",
   	"tag": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
     "settings": [
       {
         "type": "page",

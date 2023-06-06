@@ -1,12 +1,8 @@
 <link rel="stylesheet" href="{{ 'section-footer.css' | asset_url }}" media="print" onload="this.media='all'">
-{% if checkout.id == blank %}
 <link rel="stylesheet" href="{{ 'component-inputs.css' | asset_url }}" media="print" onload="this.media='all'">
-{% endif %}
 <link rel="stylesheet" href="{{ 'disclosure.css' | asset_url }}" media="print" onload="this.media='all'">
 <noscript>{{ 'section-footer.css' | asset_url | stylesheet_tag }}</noscript>
-{% if checkout.id == blank %}
 <noscript>{{ 'component-inputs.css' | asset_url | stylesheet_tag }}</noscript>
-  {% endif %}
 <noscript>{{ 'disclosure.css' | asset_url | stylesheet_tag }}</noscript>
 {%- if section.settings.enable_accordion -%}
 <link rel="stylesheet" href="{{ 'component-footer-accordion.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -34,19 +30,16 @@ footer{
 {%- if section.settings.color_heading != "rgba(0,0,0,0)" -%}
 .footer__heading{
   --color-base: {{ section.settings.color_heading }};
-  color: {{ section.settings.color_heading }};
+}
+.footer__accordion__heading svg path{
+  fill: {{ section.settings.color_heading }};
 }
 {%- endif -%}
-
-@media (min-width: 577px){ 
-{%- if section.settings.border_color != "rgba(0,0,0,0)" -%}
-  .footer__content-line{
-  --color-lines-borders: {{ section.settings.border_color }};
-}
-{% endif %}  
-}
-
 {%- if section.settings.color_text != "rgba(0,0,0,0)" -%}
+.footer__content-line{
+  --color-lines-borders: {{ section.settings.color_text }};
+  opacity: .3;
+}
 footer{
   --color-lines-borders: {{ section.settings.color_text | color_modify: 'alpha', 0.3 }};
   color: {{ section.settings.color_text }};
@@ -125,18 +118,14 @@ footer .field{
       <div class="col-12"><div class="footer__content-line"></div></div>
     </div>
     {%- endif -%}
-    
-    {% unless template == 'cart' or checkout.id != blank %}
     {%- if section.blocks.size > 0 -%}
-      <div class="grid">
-      <div class="col-8 col-st-12">
-    <footer-accordion class="grid mt-6 mt-sm-0 footer-blocks__container{% if section.settings.enable_accordion %} footer__accordion{% endif %}{% if request.design_mode and section.settings.show_all_text_in_admin %} admin-panel--no-js{% endif %}">
+    <footer-accordion class="grid footer-blocks__container{% if section.settings.enable_accordion %} footer__accordion{% endif %}{% if request.design_mode and section.settings.show_all_text_in_admin %} admin-panel--no-js{% endif %}">
       {%- for block in section.blocks -%}
       <div class="col-sp-12 {{ col }} footer-block {{ section.settings.description_size }} mt--first-child-0" {{ block.shopify_attributes }}>
         
         {%- if block.settings.heading != blank and block.type != 'newsletter' -%}
         <div class="{% if section.settings.enable_accordion %} footer__accordion__heading{% endif %}">
-          {{ '<' | append: section.settings.heading_tag }} class="footer__heading mt0 mb0 font-weight-700" >
+          {{ '<' | append: section.settings.heading_tag }} class="footer__heading mt0 mb0">
           {{- block.settings.heading | escape -}}
           {{ '</' | append: section.settings.heading_tag }}>
           {%- if section.settings.enable_accordion -%}{%- render "icon-arrow-down-small" -%}{%- endif -%}
@@ -155,7 +144,7 @@ footer .field{
         <ul class="unstyle-ul footer__menu footer-block__mt{% if section.settings.enable_accordion %} footer__accordion__content{% endif %}">
           {%- for link in block.settings.menu.links -%}
           <li>
-            <a href="{{ link.url }}" class="body3 color-base animation-underline animation-underline--thin">{{ link.title }}</a>
+            <a href="{{ link.url }}" class="color-base animation-underline animation-underline--thin">{{ link.title }}</a>
           </li>
           {%- endfor -%}
         </ul>
@@ -261,65 +250,10 @@ footer .field{
       </div>
       {%- endfor -%}
     </footer-accordion>
-      </div>
-        <div class="col-4 col-st-12 mobile--hide">
-          <div class="custom_newsletter">
-          {% if section.settings.custom_html != blank %}
-          {{ section.settings.custom_html }}
-          {% endif %}
-          </div>
-        </div>
-      </div>
     {%- endif -%}
-    <div class="footer__content-line"></div>
-      {% endunless %}
-    
-    <div class="footer_details {% if template == 'cart' %}pt20 top-spacing-medium{% elsif checkout.id != blank %}pt20{% else %}mt-6{% endif %}">
-       <div class="grid">
-         <div class="col-sp-12 col-6">
-                 {%- if section.settings.payment_enable -%}
-            {% if section.settings.payment_title != blank %}
-             <p class="m-0 mb-4 footer_payment_title footer__heading font-weight-700">{{ section.settings.payment_title }}</p>
-            {% endif %}
-            <div class="footer__payment">
-              <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
-              <ul class="unstyle-ul" role="list">
-                {%- for type in shop.enabled_payment_types -%}
-                <li class="list-payment">
-                  {{ type | payment_type_svg_tag: class: 'icon--full-color' }}
-                </li>
-                {%- endfor -%}
-              </ul>
-            </div>
-            {%- endif -%}
-         </div>
-         <div class="col-sp-12 col-6 footer_contact_wrapper">
-           <div class="footer_contact mt-6 mt-sm-0">
-             {% if section.settings.contact_title != blank %}
-             <p class="m-0 mb-4 footer_contact_title footer__heading font-weight-700">{{ section.settings.contact_title }}</p>
-            {% endif %}
-            <div class="grid">
-              {% if section.settings.address != blank %}
-          <div class="col-sp-12 col-6">
-            <p class="address body4">{{ section.settings.address }}</p>
-          </div>
-                {% endif %}
-          <div class="col-sp-12 col-6">
-            {% if section.settings.contact_text != blank %}
-              <div class="contact_text body4">
-               {{ section.settings.contact_text }}
-              </div>
-             {% endif %}
-  
-          </div>
-        </div>
-           </div>
-         </div>
-       </div>  
-    </div> 
-    
     <div class="grid footer__content-bottom">
       {%- assign left_column_with_content = false -%}
+      <div class="col-12"><div class="footer__content-line"></div></div>
       
       {% liquid
         if section.settings.enable_language_selector and localization.available_languages.size > 1
@@ -423,96 +357,39 @@ footer .field{
         
         {%- unless left_column_with_content -%}
         <div class="footer__copyright body3 mt--first-child-0">
-          <span class="copyright__content body4">&copy; Copyright 2008-{{ 'now' | date: "%Y" }} {{ shop.name }}®</span>
+          <span class="copyright__content">&copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: routes.root_url }}</span>
+          <span class="powered_by_link">{{ powered_by_link }}</span>
         </div>
         {%- endunless -%}
       </div>
       
-      {% if section.settings.made_by != blank or section.settings.made_by_text or left_column_with_content %}
+      {%- if section.settings.payment_enable != false or left_column_with_content -%}
       <div class="col-sp-12 col-6 footer__content-bottom--right">
-
-        <div class="made_by display-flex align-items-center">
-          {% if section.settings.made_by != blank %}
-          <div class="made_by_svg mr-3">
-            {{  section.settings.made_by }}
-          </div>
-            {% endif %}
-
-          {% if section.settings.made_by_text != blank %}
-          <div class="made_by_text">
-           <p class="body4 m-0">{{ section.settings.made_by_text }}</p>
-          </div>
-          {% endif %}
+        {%- if section.settings.payment_enable -%}
+        <div class="footer__payment">
+          <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
+          <ul class="unstyle-ul" role="list">
+            {%- for type in shop.enabled_payment_types -%}
+            <li class="list-payment">
+              {{ type | payment_type_svg_tag: class: 'icon--full-color' }}
+            </li>
+            {%- endfor -%}
+          </ul>
         </div>
-        
+        {%- endif -%}
         {%- if left_column_with_content -%}
         <div class="footer__copyright body3 mt--first-child-0">
-           <span class="copyright__content body4">&copy; Copyright 2008-{{ 'now' | date: "%Y" }} {{ shop.name }}®</span>
+          <span class="copyright__content">&copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: routes.root_url }}</span>
+          <span class="powered_by_link">{{ powered_by_link }}</span>
         </div>
         {%- endif -%}
       </div>
       {%- endif -%}
+
     </div>
   </div>
 </footer>
 
-     {%- unless checkout.id != blank -%}
-        <div class="page-width">
-             <div class="footer_security_logos my-4 my-sm-6">
-          <div class="footer_security_logos_inner">
-        {% if section.settings.logo_1 != blank %}
-          <div class="bottom_footer_logo_wrapper" style="max-width: {{ section.settings.max_width_icon_1 }}px;">
-                  {% assign imagesize = section.settings.logo_1.width | append: 'x' %}
-           {% if section.settings.logo_1_link != blank %}
-            <a href="{{ section.settings.logo_1_link }}" target="_blank" class="display-block">
-            {% endif %}
-          <img srcset="{{ section.settings.logo_1 | img_url: imagesize }} 1x, {{ section.settings.logo_1 | img_url: imagesize, scale: 2 }} 2x"
-               src="{{ section.settings.logo_1 | img_url: imagesize }}"
-               loading="lazy"
-               alt="{{ section.settings.logo_1.alt | escape }}"
-               >
-            {% if section.settings.logo_1_link != blank %}
-            </a>
-            {% endif %}
-          </div>
-          {% endif %}
-        {% if section.settings.logo_2 != blank %}
-          <div class="bottom_footer_logo_wrapper" style="max-width: {{ section.settings.max_width_icon_2 }}px;">
-                {% assign imagesize = section.settings.logo_2.width | append: 'x' %}
-                     {% if section.settings.logo_2_link != blank %}
-            <a href="{{ section.settings.logo_2_link }}" target="_blank" class="display-block">
-            {% endif %}
-          <img srcset="{{ section.settings.logo_2 | img_url: imagesize }} 1x, {{ section.settings.logo_2 | img_url: imagesize, scale: 2 }} 2x"
-               src="{{ section.settings.logo_2 | img_url: imagesize }}"
-               loading="lazy"
-               alt="{{ section.settings.logo_2.alt | escape }}"
-               >
-                       {% if section.settings.logo_2_link != blank %}
-            </a>
-            {% endif %}
-          </div>
-          {% endif %}
-                  {% if section.settings.logo_3 != blank %}
-          <div class="bottom_footer_logo_wrapper" style="max-width: {{ section.settings.max_width_icon_3 }}px;"> 
-                {% assign imagesize = section.settings.logo_3.width | append: 'x' %}
-             {% if section.settings.logo_3_link != blank %}
-            <a href="{{ section.settings.logo_3_link }}" target="_blank" class="display-block">
-            {% endif %}
-          <img srcset="{{ section.settings.logo_3 | img_url: imagesize }} 1x, {{ section.settings.logo_3 | img_url: imagesize, scale: 2 }} 2x"
-               src="{{ section.settings.logo_3 | img_url: imagesize }}"
-               loading="lazy"
-               alt="{{ section.settings.logo_3.alt | escape }}"
-               >
-                       {% if section.settings.logo_3_link != blank %}
-            </a>
-            {% endif %}
-          </div>
-                    {% endif %}
-          </div>
-      </div>
-</div>
-{% endunless %}
-       
 {% javascript %}
   class LocalizationForm extends HTMLElement {
     constructor() {
@@ -631,10 +508,6 @@ footer .field{
 		  {
 			"value": "h5",
 			"label": "t:sections.general.settings.heading_tag.options__small.label"
-		  },
-          		  {
-			"value": "p",
-			"label": "Body"
 		  }
 		],
 		"default": "h5",
@@ -656,109 +529,7 @@ footer .field{
 		"default": "body2",
 		"label": "t:sections.general.settings.description_size.label"
 	  },
-      {
-        "type": "header",
-        "content": "Newsletter"
-      },
-      {
-        "type": "html",
-        "id": "custom_html",
-        "label": "HTML"
-      },
-      {
-        "type": "header",
-        "content": "Contact"
-      },
-      {
-        "type": "text",
-        "id": "contact_title",
-        "label": "Title"
-      },
-      {
-        "type": "textarea",
-        "id": "address",
-        "label": "Address"
-      },
-      {
-        "type": "richtext",
-        "id": "contact_text",
-        "label": "Text"
-      },
-      {
-        "type": "header",
-        "content": "Bottom footer"
-      },
-      {
-        "type": "html",
-        "id": "made_by",
-        "label": "Made by SVG"
-      },
-          {
-        "type": "text",
-        "id": "made_by_text",
-        "label": "Made by text",
-        "default": "Contacts"
-      },
-            {
-		"type": "image_picker",
-		"id": "logo_1",
-		"label": "Logo 1"
-	  },
-                {
-		"type": "url",
-		"id": "logo_1_link",
-		"label": "Logo 1 link"
-	  },
-          {
-        "type": "range",
-        "id": "max_width_icon_1",
-        "min": 100,
-        "max": 600,
-        "step": 10,
-        "unit": "px",
-        "label": "Logo 1 max width",
-        "default": 100
-      },
-                {
-		"type": "image_picker",
-		"id": "logo_2",
-		"label": "Logo 2"
-	  },
-                    {
-		"type": "url",
-		"id": "logo_2_link",
-		"label": "Logo 2 link"
-	  },
-              {
-        "type": "range",
-        "id": "max_width_icon_2",
-        "min": 100,
-        "max": 600,
-        "step": 10,
-        "unit": "px",
-        "label": "Logo 2 max width",
-        "default": 100
-      },
-     {
-		"type": "image_picker",
-		"id": "logo_3",
-		"label": "Logo 3"
-	  },
-      {
-		"type": "url",
-		"id": "logo_3_link",
-		"label": "Logo 3 link"
-	  },
-              {
-        "type": "range",
-        "id": "max_width_icon_3",
-        "min": 100,
-        "max": 600,
-        "step": 10,
-        "unit": "px",
-        "label": "Logo 3 max width",
-        "default": 100
-      },
+
       {
         "type": "header",
         "content": "Mobile settings"
@@ -808,12 +579,6 @@ footer .field{
         "default": true,
         "label": "t:sections.footer.settings.payment_enable.label"
       },
-    {
-      "type": "text",
-      "id": "payment_title",
-      "label": "Title",
-      "default": "All cards accepted"
-    },
       {
         "type": "header",
         "content": "t:sections.general.settings.header_colors.content"
@@ -835,12 +600,6 @@ footer .field{
         "id": "color_links",
         "default": "rgba(0,0,0,0)",
         "label": "t:sections.general.settings.links.label"
-      },
-      {
-        "type": "color",
-        "id": "border_color",
-        "default": "rgba(0,0,0,0)",
-        "label": "Border color"
       },
       {
         "type": "header",
@@ -894,11 +653,7 @@ footer .field{
 		"label": "t:sections.general.settings.gradient.label"
       }
     ],
-  "max_blocks": 4,
     "blocks": [
-      {
-      "type": "@app"  
-      },
       {
         "type": "link_list",
         "name": "t:sections.footer.blocks.link_list.name",
@@ -989,7 +744,7 @@ footer .field{
         ]
       }
     ],
-    "max_blocks": 4,
+    "max_blocks": 6,
     "default": {
       "blocks": [
         {

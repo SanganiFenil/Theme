@@ -14,7 +14,7 @@
   margin-right: 5px;
 }
 .pagination__item:not(.pagination__item--current){
-  --background: transparent;
+  --background: var(--color-secondary-background);
   --radius-button: 50%;
 }
 .pagination__item{
@@ -24,7 +24,6 @@
   width: 40px;
   height: 40px;
   font-weight: var(--font-body-bold-weight);
-      line-height: 1;
   border-radius: 50%;
   text-decoration: none;
   color: var(--color-base);

@@ -2,7 +2,7 @@
 
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
-  <head>{% render 'yoast-seo' %}
+  <head>
     <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,9 +19,9 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
-    {%- assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros | strip_html -%}
+    {%- assign formatted_balance = gift_card.balance | money_without_trailing_zeros | strip_html -%}
 
-    <title>{{ 'gift_cards.issued.title' | t: value: formatted_initial_value, shop: shop.name }}</title>
+    <title>{{ 'gift_cards.issued.title' | t: value: formatted_balance, shop: shop.name }}</title>
 
     <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
 
@@ -206,9 +206,9 @@
       <div class="gift-card__price h4">
         <p>
           {% if settings.currency_code_enabled %}
-            {{ gift_card.initial_value | money_with_currency }}
+            {{ gift_card.balance | money_with_currency }}
           {% else %}
-            {{ gift_card.initial_value | money }}
+            {{ gift_card.balance | money }}
           {% endif %}
         </p>
         {%- if gift_card.enabled == false or gift_card.expired -%}
@@ -216,19 +216,18 @@
         {%- endif -%}
       </div>
 
-      {% if settings.currency_code_enabled %}
-        {%- assign gift_card_balance = gift_card.balance | money_with_currency -%}
-      {% else %}
-        {%- assign gift_card_balance = gift_card.balance | money -%}
+      {% if gift_card.expires_on %}
+        {%- assign gift_card_expiration_date = gift_card.expires_on | date: '%B %e, %Y' -%}
+        <p class="gift-card__label gift-card__text">{{ 'gift_cards.issued.expiration_date' | t: expires_on: gift_card_expiration_date }}</p>
       {% endif %}
-      {%- if gift_card.balance != gift_card.initial_value -%}
-        <p class="gift-card__label caption-large">{{ 'gift_cards.issued.remaining_html' | t: balance: gift_card_balance }}</p>
-      {%- endif -%}
     </header>
 
     <main class="gift-card">
       <div class="gift-card__image-wrapper">
         <img src="{{ 'cift_card.svg' | asset_url }}" alt="" class="gift-card__image" height="{{ 570 | divided_by: 1.5 }}" width="570" loading="lazy">
+      </div>
+      <div class="gift-card__text-wrapper">
+        <p class="gift-card__text">{{ 'gift_cards.issued.how_to_use_gift_card' | t }}</p>
       </div>
       <div class="gift-card__qr-code" data-identifier="{{ gift_card.qr_identifier }}"></div>
       <div class="gift-card__information">
@@ -261,12 +260,6 @@
           >
             <span>{{ 'gift_cards.issued.shop_link' | t }}</span>
           </a>
-          <button
-            class="btn btn_zoom"
-            onclick="window.print();"
-          >
-            <span>{{ 'gift_cards.issued.print_gift_card' | t }}</span>
-          </button>
         </div>
       </div>
     </main>

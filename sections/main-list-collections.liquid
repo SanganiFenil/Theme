@@ -76,7 +76,7 @@
     {%- if section.settings.heading != blank -%}
     <div class="grid{% if section.settings.heading_aligment == "text-center" %} justify-content-center{% endif %} heading--mb">
       <div class="col-st-12 col-6 {{ section.settings.heading_aligment }}">
-        <h2 class="mt0 mb0">{{ section.settings.heading }}</h2>
+        <h1 class="mt0 mb0">{{ section.settings.heading }}</h1>
       </div>
     </div>
     {%- endif -%}
@@ -99,7 +99,7 @@
       <div class="grid el_mt_40 {{ section.settings.texts_aligment }}">
         {%- for collection in collections -%}
         <div class="col-sp-{{ section.settings.mobile_grid }} {{ section.settings.grid }}">
-          <a href="{{ collection.url }}" class="collection-list-{{ colection_type }} a--remove-hover-underline{% if settings.enable_zoom_animation %} image-hover-scaling-up{% endif %} hover-area {% if settings.product_card_image_resize == "contain" %} product-card-image--contain{% endif %}">
+          <a href="{{ collection.url }}" class="collection-list-{{ colection_type }} a--remove-hover-underline{% if settings.enable_zoom_animation %} image-hover-scaling-up{% endif %} hover-area">
             
             {%- if collection.featured_image != blank -%}
             {%- capture image_ratio -%}
@@ -177,15 +177,15 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.heading_alignment.label"
+		"label": "t:sections.general.settings.heading_aligment.label"
 	  },
       {
         "type": "header",
@@ -358,15 +358,15 @@
 		"options": [
 		  {
 			"value": "text-left",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center",
-		"label": "t:sections.general.settings.texts_alignment.label"
+		"label": "t:sections.general.settings.texts_aligment.label"
 	  },
       {
         "type": "checkbox",
@@ -386,15 +386,15 @@
 		"options": [
 		  {
 			"value": "text-left-mobile",
-			"label": "t:sections.general.settings.texts_alignment.options__left.label"
+			"label": "t:sections.general.settings.texts_aligment.options__left.label"
 		  },
 		  {
 			"value": "text-center-mobile",
-			"label": "t:sections.general.settings.texts_alignment.options__center.label"
+			"label": "t:sections.general.settings.texts_aligment.options__center.label"
 		  }
 		],
 		"default": "text-center-mobile",
-		"label": "t:sections.collection-list.settings.texts_alignment_mobile.label"
+		"label": "t:sections.collection-list.settings.texts_aligment_mobile.label"
 	  },
       {
         "type": "header",

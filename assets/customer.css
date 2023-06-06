@@ -56,7 +56,9 @@
 .customer .pagination-wrapper{
   margin-top: var(--padding4);
 }
-
+.order-history{
+  word-break: break-all;
+}
 @media (min-width: 577px){
   .btns__container > [class*="btn"]:not(:first-child){
     margin-left: 30px;
@@ -190,8 +192,8 @@ table .order__sale-price--color{
   .customer table tbody tr:last-child td{
     border-bottom: 1px solid var(--color-lines-borders);
   }
-  footer[class*=top-spacing-]{
-    margin-top: var(--sections-top-spacing);
+  .content-for-layout{
+    margin-bottom: calc(var(--sections-top-spacing) / 2);
   }
 }
 @media (max-width: 992px){
@@ -242,7 +244,7 @@ table .order__sale-price--color{
   .customer table.padding-bottom--0 tbody tr:last-child{
     padding-bottom: 0;
   }
-  footer[class*=top-spacing-]{
-    margin-top: var(--sections-top-spacing-mobile);
+  .content-for-layout{{
+    margin-top: calc(var(--sections-top-spacing-mobile) / 2);
   }
 }

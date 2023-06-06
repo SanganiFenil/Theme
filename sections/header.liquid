@@ -1,13 +1,3 @@
-{%- comment -%}
-This file has been modified by the Yoast SEO for Shopify app.
-You can learn more about this (and learn how to cleanly revert these changes) at https://yoa.st/removing-theme-changes.
-{%- endcomment -%}
-{%- liquid
-	assign disabled_by_yoast_seo = true
-	if content_for_header contains 'yoast-active-script'
-		assign disabled_by_yoast_seo = false
-	endif
--%}
 <style>
   header{
     opacity: 0;
@@ -20,20 +10,12 @@ You can learn more about this (and learn how to cleanly revert these changes) at
     {%- if section.settings.show_search == false or section.settings.header_layout == 'header-layout-vertical' -%}
     padding: 25px 0;
     {%- else -%}
-    padding: 16px 0 10px;
+    padding: 20px 0;
     {%- endif -%}
-    font-size:var(--font-body3-size);
-  }
-  .header label{
-    font-size:var(--font-body3-size);
-  }
-
-  .header .header__secondary-menu .list-menu a{
-    font-size:var(--font-body4-size);
   }
   .header.logo-to-left{
     grid-template-columns: auto 1fr auto;
-    gap: 20px;
+    gap: 30px;
   }
   .header>*{
     display: flex;
@@ -74,31 +56,9 @@ You can learn more about this (and learn how to cleanly revert these changes) at
     --column-gap: 20px;
     gap: var(--row-gap) var(--column-gap);
   }
-
-  .header__secondary-menu .list-menu.has-second-nav{
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 100%;
-        align-items: center;
-  }
-
-  .header__secondary-menu .list-menu--inline.list-menu--right{
-    display: flex;
-    justify-content:flex-end;
-        column-gap: 24px;
-  }
-
-   .header__secondary-menu  .secondary_menu-left-nav{
-     font-weight:bold;
-         column-gap: 16px;
-   }
-  .header__secondary-menu  .secondary_menu-left-nav li:last-child a{
-    color:var(--color-accent);
-  }
-  
   .list-menu--classic .list-menu--inline{
-    --row-gap: 10px;
-    --column-gap: 10px;
+    --row-gap: 16px;
+    --column-gap: 24px;
   }
   {%- if section.settings.icons_color != "rgba(0,0,0,0)" -%}
     body .tiles-menu .tiles-menu-item svg:first-child,
@@ -112,27 +72,14 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       --color-base:{{ section.settings.icons_color }};
     }
   {%- endif -%}
-
-  {% if template == 'cart' or checkout.id != blank %}
-      .header__desktop .header{
-            grid-template-columns: 1fr auto 1fr;
-      }
-    .header__mobile .header{ 
-      grid-template-columns: 1fr 1fr;
-    }
-  {% endif %}
 </style>
 
-{% if checkout.id == blank %}
 <link rel="stylesheet" href="{{ 'component-inputs.css' | asset_url }}" media="print" onload="this.media='all'">
-{% endif %}  
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-menu-submenu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'section-header.css' | asset_url }}" media="print" onload="this.media='all'">
-{% if checkout.id == blank %}
 <noscript>{{ 'component-inputs.css' | asset_url | stylesheet_tag }}</noscript>
- {% endif %}   
 <noscript>{{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'component-menu-submenu.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}</noscript>
@@ -210,6 +157,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
 </style>
 {%- endif -%}
 
+
 <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-modal.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- if settings.cart_type == "drawer" -%}
@@ -240,7 +188,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
 {%- if section.settings.enable_sticky_header and template.name != 'product' and template.name != 'collection' -%}
 <sticky-header class="display-block">
 {%- endif -%}
-<header class="{{ section.settings.header_layout }}-main" data-role="{{ theme.role }}" data-section-name="{{ section.settings.header_layout }}">
+<header data-role="{{ theme.role }}" data-section-name="{{ section.settings.header_layout }}">
   <div class="header__mobile page-width">
     <div class="header{% if section.settings.logo_position_mobile == 'left' %} logo-to-left--mobile{% if settings.cart_type == "catalog_mode" %} logo-to-left--catalog{% endif %}{% endif %}">
       {%- capture logo -%}
@@ -277,20 +225,18 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       {%- endcapture -%}
       
       {% if section.settings.logo_position_mobile == 'left' %}{{ logo }}{% endif %}
-
-      {% unless template == 'cart' or checkout.id != blank %}
+      
       <header-drawer data-breakpoint="tablet">
         <details class="drawer">
 
           <summary class="main-menu-button">
             <div class="drawer__icon-menu">
               {%- render "icon-hamburger" -%}
-              <span class="font-weight-700 drawer__icon-menu_text">Menu</span>
             </div>
           </summary>
 
           <div class="menu-drawer">
-            <div class="drawer__header p-3">
+            <div class="drawer__header">
               <button class="menu-drawer__close-button link w-full close-menu-js" aria-label="true" aria-label="{{ 'general.aria_label.close' | t }}">{%- render "icon-close" -%}</button>
               {%- unless section.settings.open_search -%}
               {%- render "header-search" show_search:section.settings.show_search, fullwidth: true, mobile: true -%}
@@ -298,77 +244,33 @@ You can learn more about this (and learn how to cleanly revert these changes) at
             </div>
             <div class="drawer__container">
               <div class="drawer__content">
-                <div class="drawer__content-pad pt-0">
-         <hr class="mt-0">
-                    {% if settings.subscription_discount_percentage > 0 %}
-  <p class="sidebar-menu-title mt-0 px-3">
-    <a class="text-decoration-none accent-text-color autoship-link" href="/collections/autoship-get-10-off">Get {{ settings.subscription_discount_percentage }}% OFF
-    <span class="subscription_discount_text_wrap display-flex align-items-center justify-content-between">  
-    <span class="font-weight-400 subscription_discount_text">with a recurring order</span>
-    <span class="arrow-right accent-text-color">></span></a>
-    </span>
-  </p>
-  {% endif %}  
-  <ul class="unstyle-ul justify-content-start text-left mt-0 px-3">
-  
-        {% if shop.customer_accounts_enabled %}  
-        <li>
-        <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="menu-drawer__menu-item link w-full drawer__icon-account a--remove-hover-underline color-base {% if template.name == 'account' or template.name == 'login' %}active{% endif %}">
-        {% comment %}{% render "icon-account" %}{% endcomment %}
-        <span>
-        {%- liquid
-        if customer
-        echo 'customer.account_fallback' | t
-        else
-        echo 'customer.log_in' | t
-        endif
-        -%}
-        </span>
-          <span class="arrow-right accent-text-color">></span>
-        </a>
-        </li>
-        {% endif %}
-    <li>
-      <a class="text-decoration-none menu-drawer__menu-item pb-0" href="{{shop.url}}/pages/contact-us">Contact us<span class="arrow-right accent-text-color">></span></a>
-    </li>
-  </ul>
-<hr>
-<p class="sidebar-menu-title mt-0 px-3"><a href="{{shop.url}}/pages/products" class="sidebar-menu-title-link display-flex align-items-center justify-content-between">All products <span class="arrow-right accent-text-color">></span></a></p>
-<hr>
+                <div class="drawer__content-pad">
+                  {%- if section.settings.menu != blank -%}
                   {%- render "menu-drawer",
-                  			  linklist: linklists['all-products'].links,
-                              menu_title: 'Filter products by',
+                  		      menu_font_weight:section.settings.menu_font_weight,
+                  			  linklist: section.settings.menu.links,
                   			  desktop_menu_type: section.settings.header_layout,
                   			  icons: svg_icons
                   -%}
-                  {%- render "menu-drawer",
-                  			  linklist: linklists['shopping-info-2021'].links,
-                              menu_title: linklists['shopping-info-2021'].title,
-                  			  desktop_menu_type: section.settings.header_layout,
-                  			  icons: svg_icons
-                  -%}
-                 {%- render "menu-drawer",
-                  			  linklist: linklists['bully-max-2021'].links,
-                              menu_title: linklists['bully-max-2021'].title,
-                  			  desktop_menu_type: section.settings.header_layout,
-                  			  icons: svg_icons
-                  -%}
-
-                    <div class="menu_drawer_address text-center">
-                      <p class="mt-0">Bully Max, LLC 4885-A McKnight Road 413 Pittsburgh, PA 15237</p>
-                      <p class="mt-3"><strong>Phone:</strong> 1-833-BULLY-MAX<br>
-                      <strong>E-Mail:</strong> help@bullymax.com</p>
-                      <div id="site-copyright" class="mt-3">
-                      <small><em>&copy; Copyright 2008-{{ 'now' | date: "%Y" }} {{ shop.name }}&reg;</em></small>
-                      </div>
-                    </div>
-
-                  {% comment %}
+                  {%- endif -%}
                   {%- if section.settings.secondary_menu != blank -%}
                   {%- render "menu-drawer-secondary" linklist: section.settings.secondary_menu.links -%}
                   {%- endif -%}
-                  {% endcomment %}
-                
+                  
+                  {%- if shop.customer_accounts_enabled -%}
+                  <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="body2{% if section.settings.menu_font_weight == "strong" %} strong{% endif %} link w-full drawer__icon-account a--remove-hover-underline color-base">
+                    {% render "icon-account" %}
+                    <span>
+                      {%- liquid
+                        if customer
+                          echo 'customer.account_fallback' | t
+                        else
+                          echo 'customer.log_in' | t
+                        endif
+                      -%}
+                    </span>
+                  </a>
+                  {%- endif -%}
 
                 </div>
               </div>
@@ -377,65 +279,28 @@ You can learn more about this (and learn how to cleanly revert these changes) at
           <button class="drawer__outer-background close-menu-js"></button>
         </details>
       </header-drawer>
-      {% endunless %}
 
       {% if section.settings.logo_position_mobile == 'center' %}{{ logo }}{% endif %}
 
-      {% unless template == 'cart' or checkout.id != blank %}
       {%- if settings.cart_type == "catalog_mode" -%}
         {% if section.settings.logo_position_mobile == 'center' %}<div style="width: 32px;"></div>{% endif %}
       {%- else -%}
         <div class="header__icons">
           <a href="{{ routes.cart_url }}" class="header__button {{ section.settings.menu_font_weight }}" id="cart-icon-bubble--mobile">
-            {%- render 'cart-icon-bubble' -%} 
+            {%- render 'cart-icon-bubble' -%}
           </a>
         </div>
       {%- endif -%}
-      {% endunless %}
-
-               {% if template == 'cart' or checkout.id != blank %}
-           <div class="cart_secure_block">
-               <div class="mr-2 cart_secure_svg">
-              <svg width="13" height="17" viewBox="0 0 13 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10.8333 7.08333V4.25C10.8333 1.90329 8.89272 0 6.5 0C4.10728 0 2.16667 1.90329 2.16667 4.25V7.08333H0V17H13V7.08333H10.8333ZM7.22222 12.5538V14.1667H5.77778V12.5538C5.34806 12.308 5.05556 11.8568 5.05556 11.3333C5.05556 10.5513 5.70267 9.91667 6.5 9.91667C7.29733 9.91667 7.94444 10.5513 7.94444 11.3333C7.94444 11.8561 7.65267 12.308 7.22222 12.5538ZM3.61111 7.08333V4.25C3.61111 2.68742 4.90678 1.41667 6.5 1.41667C8.0925 1.41667 9.38889 2.68742 9.38889 4.25V7.08333H3.61111Z" fill="#FC4F02"/>
-              </svg>
-              </div>
-              <p class="mt-0 cart_secure_text body4 font-weight-700"><span class="font-weight-400">HTTPS</span> Secure site</p>
-           </div>
-         {% endif %}
-      
-    {% comment %}
-    ***** Mobile Nav Menu Visibile *****
-    {% endcomment %}
-            {%- liquid
-          case section.settings.header_layout
-          when 'header-layout-classic'
-          if section.settings.menu != blank
-          render 'header-menu', linklist:section.settings.menu.links, animation:'menu--animation-underline', mega_menu_index:mega_menu_index, menu_font_weight:section.settings.menu_font_weight
-          else
-          echo '<div></div>'
-          endif
-          else
-          if section.settings.secondary_menu != blank
-          render 'header-menu-secondary' linklist:section.settings.secondary_menu.links animation:'menu--animation-underline'
-          else
-          echo '<div></div>'
-          endif
-          endcase
-        -%}
     </div>
     {%- if section.settings.open_search and section.settings.show_search -%}
-    <div class="opened-search">
+    <div class="opened-search predictive-search__two-columns__tablet">
     {%- render "header-search" show_search:section.settings.show_search, fullwidth: true, mobile: true -%}
     </div>
     {%- endif -%}
-
-
   </div>
 
   <div class="header__desktop">
 
-    {% unless template == 'cart' or checkout.id != blank %}
     {%- if section.settings.secondary_menu != blank and section.settings.header_layout == 'header-layout-classic' -%}
     <div class="header__secondary-menu display-flex align-items-center">
       <div class="{{ section.settings.width }}">
@@ -443,8 +308,6 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       </div>
     </div>
     {%- endif -%}
-  {% endunless %}
-    
     <div class="{{ section.settings.header_layout }} {{ section.settings.width }}"
          {%- if section.settings.width == 'page-wide' -%}data-header-wide="true"{%- endif -%}>
       <div class="header{% if section.settings.logo_position == 'left' %} logo-to-left{% endif %}{% if section.settings.header_layout == 'header-layout-vertical' %} menu-to-right{% endif %}">
@@ -508,32 +371,16 @@ You can learn more about this (and learn how to cleanly revert these changes) at
 
         {% if section.settings.logo_position == 'center' %}{{ logo }}{% endif %}
 
-         {% if template == 'cart' or checkout.id != blank %}
-           <div class="cart_secure_block">
-               <div class="mr-2 cart_secure_svg">
-              <svg width="13" height="17" viewBox="0 0 13 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10.8333 7.08333V4.25C10.8333 1.90329 8.89272 0 6.5 0C4.10728 0 2.16667 1.90329 2.16667 4.25V7.08333H0V17H13V7.08333H10.8333ZM7.22222 12.5538V14.1667H5.77778V12.5538C5.34806 12.308 5.05556 11.8568 5.05556 11.3333C5.05556 10.5513 5.70267 9.91667 6.5 9.91667C7.29733 9.91667 7.94444 10.5513 7.94444 11.3333C7.94444 11.8561 7.65267 12.308 7.22222 12.5538ZM3.61111 7.08333V4.25C3.61111 2.68742 4.90678 1.41667 6.5 1.41667C8.0925 1.41667 9.38889 2.68742 9.38889 4.25V7.08333H3.61111Z" fill="#FC4F02"/>
-              </svg>
-              </div>
-              <p class="mt-0 cart_secure_text body4 font-weight-700"><span class="font-weight-400">HTTPS</span> Secure site</p>
-           </div>
-           <p class="checkout-progress mb-0 justify-content-end {% unless checkout.id != blank %} hide{% endunless %}">Completed <span class="amount font-weight-700">00%</span></p>
-         {% endif %}
-         
-        {% unless template == 'cart' or checkout.id != blank %}
         <div class="header__icons">
           {%- if section.settings.header_layout != 'header-layout-vertical' -%}
           {%- render "header-search" show_search:section.settings.show_search, fullwidth: false -%}
           {%- endif -%}
-          
-         {% unless template == 'cart' or checkout.id != blank %}
+
           <div class="header__icons__customer">
             {%- if shop.customer_accounts_enabled -%}
-            <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__button desktop_header_login_text">
-              {% comment %}
+            <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__button">
               {% render "icon-account" %}
-              {% endcomment %}
-              <span>
+              <span class="visually-hidden">
                 {%- liquid
                   if customer
                     echo 'customer.account_fallback' | t
@@ -546,15 +393,13 @@ You can learn more about this (and learn how to cleanly revert these changes) at
             {%- endif -%}
 
             {%- unless settings.cart_type == "catalog_mode" -%}
-            <a href="{{ routes.cart_url }}" class="header__button {{ section.settings.menu_font_weight }}" id="cart-icon-bubble--desktop">
-             {%- render 'cart-icon-bubble' -%}
+            <a href="{{ routes.cart_url }}" class="header__button {{ section.settings.menu_font_weight }}" id="cart-icon-bubble">
+              {%- render 'cart-icon-bubble' -%}
             </a>
             {%- endunless -%}
 
           </div>
-          {% endunless %}
         </div>
-  {% endunless %}
 
       </div>
     </div>
@@ -573,7 +418,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
               menu_font_weight:section.settings.menu_font_weight
           -%}
         </div>
-        <div class="col-four_fifth">
+        <div class="col-four_fifth predictive-search__two-columns">
           {%- render "header-search" show_search:section.settings.show_search, fullwidth: true -%}
         </div>
         {%- else -%}
@@ -604,19 +449,6 @@ You can learn more about this (and learn how to cleanly revert these changes) at
 {%- if section.settings.enable_sticky_header and template.name != 'product' and template.name != 'collection' -%}
 </sticky-header>
 {%- endif -%}
-
-{%- if checkout.id != blank -%}
-<div id="bradcrumb-wrapper" class="sticky-top">
-  <div class="container-md">
-    {{ breadcrumb }}
-  </div>
-
-  <div class="additional-checkout-buttons wide">
-    {{ content_for_additional_checkout_buttons }}
-  </div>
-  <div class="clearfix"></div>
-</div>
-{% endif %}
 
 {%- if settings.cart_type == "notification" -%}
   {% render 'cart-notification' %}
@@ -655,9 +487,6 @@ You can learn more about this (and learn how to cleanly revert these changes) at
 </script>
 {% endif %}
 
-{%- comment -%}Yoast SEO schema control block: start.{%- endcomment -%}
-{%- assign yoast_seo_settings = shop.metafields.yoast_seo.settings.value | default: shop.metafields.yoast_seo.settings -%}
-{%- if disabled_by_yoast_seo or yoast_seo_settings.schema.useTheme.schema or yoast_seo_settings.schema.useTheme.organization -%}
 <script type="application/ld+json">
   {
     "@context": "http://schema.org",
@@ -680,9 +509,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
     ],
     "url": {{ request.origin | append: page.url | json }}
   }
-{%- comment -%}Yoast SEO schema control block: end.{%- endcomment -%}
 </script>
-{%- endif -%}
 
 {%- if section.settings.enable_sticky_header and template.name != 'product' and template.name != 'collection' -%}
 <script> 
@@ -712,7 +539,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
     }
 
     connectedCallback() {
-      this.header = document.getElementById('shopify-section-header');
+      this.header = document.querySelector('.section-header');
       this.headerBounds = {};
       this.currentScrollTop = 0;
       this.preventReveal = false;
@@ -833,10 +660,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
 
 {%- if request.page_type == 'index' -%}
   {% assign potential_action_target = request.origin | append: routes.search_url | append: "?q={search_term_string}" %}
-  {%- comment -%}Yoast SEO schema control block: start.{%- endcomment -%}
-{%- assign yoast_seo_settings = shop.metafields.yoast_seo.settings.value | default: shop.metafields.yoast_seo.settings -%}
-{%- if disabled_by_yoast_seo or yoast_seo_settings.schema.useTheme.schema or yoast_seo_settings.schema.useTheme.website -%}
-<script type="application/ld+json">
+  <script type="application/ld+json">
     {
       "@context": "http://schema.org",
       "@type": "WebSite",
@@ -848,14 +672,13 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       },
       "url": {{ request.origin | append: page.url | json }}
     }
-  {%- comment -%}Yoast SEO schema control block: end.{%- endcomment -%}
-</script>
-{%- endif -%}
+  </script>
 {%- endif -%}
 
 {% schema %}
 {
   "name": "t:sections.header.name",
+  "class": "section-header",
   "settings": [
 	{
       "type": "select",
@@ -889,13 +712,6 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       "id": "secondary_menu",
       "default": "main-menu",
       "label": "t:sections.header.settings.secondary_menu.label"
-    },
-    {
-      "type": "link_list",
-      "id": "secondary_menu_left",
-      "default": "main-menu",
-      "label": "Secondary Menu Extra Links",
-      "info": "These extra link only shows if the navigation is set to classic (default). Final link is accent color."
     },
     {
       "type": "select",
@@ -993,15 +809,15 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       "options": [
         {
           "value": "left",
-          "label": "t:sections.general.settings.texts_alignment.options__left.label"
+          "label": "t:sections.general.settings.texts_aligment.options__left.label"
         },
         {
           "value": "center",
-          "label": "t:sections.general.settings.texts_alignment.options__center.label"
+          "label": "t:sections.general.settings.texts_aligment.options__center.label"
         }
       ],
       "default": "center",
-      "label": "t:sections.header.settings.logo_alignment.label"
+      "label": "t:sections.header.settings.logo_aligment.label"
     },
     {
       "type": "header",
@@ -1034,15 +850,15 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       "options": [
         {
           "value": "left",
-          "label": "t:sections.general.settings.texts_alignment.options__left.label"
+          "label": "t:sections.general.settings.texts_aligment.options__left.label"
         },
         {
           "value": "center",
-          "label": "t:sections.general.settings.texts_alignment.options__center.label"
+          "label": "t:sections.general.settings.texts_aligment.options__center.label"
         }
       ],
       "default": "center",
-      "label": "t:sections.header.settings.logo_alignment.label"
+      "label": "t:sections.header.settings.logo_aligment.label"
     },    
     {
       "type": "header",
